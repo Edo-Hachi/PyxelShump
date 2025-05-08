@@ -15,12 +15,18 @@ class Player:
         self.width = 8
         self.height = 8
 
+        self.col_x = 2  # Collision X
+        self.col_y = 2  # Collision Y
+        self.col_w = 4  # Collision Width
+        self.col_h = 4
+        self.col_active = True
+
         self.SprName = "TOP"    #Drawing Sprite Name
 
         self.ExtIndex = 0
         self.ExtSpr = "EXT01"  # Exhaust Sprite Name
 
-        self.bullets = []  # Bullet Manage list
+        #self.bullets = []  # Bullet Manage list
         #Bullet
 
     def update(self):
@@ -32,9 +38,9 @@ class Player:
             self.ExtIndex = 0
 
 
+        self.SprName = "TOP"
         dx = 0  #direction
         dy = 0
-        self.SprName = "TOP"
 
         if pyxel.btn(pyxel.KEY_LEFT):
             dx -= 1
@@ -64,14 +70,23 @@ class Player:
         
         #弾の発射
         if pyxel.btnp(pyxel.KEY_SPACE):
-            self.bullets.append(Bullet(self.x-4, self.y-2))
-            self.bullets.append(Bullet(self.x+4, self.y-2))
 
+            pyxel.play(0, 0)  # 効果音再生
+
+            #self.bullets.append(Bullet(self.x-4, self.y-2, 8, 8))
+            #self.bullets.append(Bullet(self.x+4, self.y-2, 8, 8))
+
+            Common.player_bullet_list.append(Bullet(self.x-4, self.y-2, 8, 8)) # 弾の情報をリストに追加
+            Common.player_bullet_list.append(Bullet(self.x+4, self.y-2, 8, 8)) # 弾の情報をリストに追加
+            
         # 弾の更新と削除
-        for blt in self.bullets:
-            blt.update()
-        self.bullets = [b for b in self.bullets if b.active]
+        for _bullet in Common.player_bullet_list:
+            _bullet.update()
+        
+        #self.bullets = [b for b in self.bullets if b.active]
+        Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
 
+    
     def draw(self):
 
         #Player Ship
@@ -83,6 +98,11 @@ class Player:
             #Common.SprList[ExtNames[self.ExtIndex]].x, Common.SprList[ExtNames[self.ExtIndex]].y, self.width, self.height, pyxel.COLOR_BLACK)
             Common.SprList[self.ExtSpr].x, Common.SprList[self.ExtSpr].y, self.width, self.height, pyxel.COLOR_BLACK)
 
+        # Collision Box
+        #pyxel.rect(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_GREEN)
+        
+
         # 描画
-        for blt in self.bullets:
-            blt.draw()
+        for _bullet in Common.player_bullet_list:
+            _bullet.draw()
+        

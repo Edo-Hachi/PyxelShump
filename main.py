@@ -2,9 +2,13 @@ import pyxel
 import random
 
 import Common
+from Enemy import Enemy
+
+
 from StarManager import StarManager
 from Player import Player
 
+# Title State ----------------------------------------
 def update_title(self):
     self.star_manager.update()
     if pyxel.btn(pyxel.KEY_SPACE):
@@ -17,36 +21,36 @@ def draw_title(self):
 
     pyxel.text(40, 50, "Mini Shooter", 7)
     pyxel.text(40, 70, "Press SPACE to Start", 7)
+# Title State ----------------------------------------
+
+# Playing State ----------------------------------------
 
 def update_playing(self):
     self.star_manager.update()
     self.player.update()
+    self.Enemy.update()
 
-
-def draw_enemy(self):
-    #animate enemy sprite
-    #sprname = basename + str(_enemy_spr)
-    self.enemy_spr = (self.enemy_spr + 0.1) % 3.5
-    sprname = f"ENEMY01_{round(self.enemy_spr)}"
-
-    pyxel.blt(self.enemy_x, self.enemy_y, Common.TILE_BANK0,
-            Common.SprList[sprname].x, Common.SprList[sprname].y, 8, 8, pyxel.COLOR_BLACK)
-    
-    self.enemy_y += 1
-    if self.enemy_y > Common.WIN_HEIGHT:
-        self.enemy_y = 0
-        self.enemy_x = random.randint(0, Common.WIN_WIDTH - 8)
-
+    for _enemy in Common.enemy_list:
+        if _enemy.active:
+            if Common.check_collision(self.player.x, self.player.y, self.player.width, self.player.height,
+                                       _enemy.x, _enemy.y, _enemy.w, _enemy.h):
+                print("Collision!")
 
 def draw_playing(self):
     pyxel.cls(pyxel.COLOR_NAVY)
     self.star_manager.draw()
     self.player.draw()
 
-    draw_enemy(self)
+    self.Enemy.draw()   
+    #draw_enemy(self)
 
     pyxel.text(5, 5, f"Score: {Common.Score}", 7)
     pyxel.text(5, 15, f"High Score: {Common.HighScore}", 7)
+
+# Playing State ----------------------------------------
+
+
+
 
 class App:
     def __init__(self):
@@ -66,14 +70,19 @@ class App:
         Common.HighScore = 100
 
         #debug code
-        self.enemy_spr = 0
+        #self.enemy_spr = 0
         self.enemy_x = 64
-        self.enemy_y = 8
+        self.enemy_y = 32
+        self.Enemy = Enemy(self.enemy_x, self.enemy_y, 8, 8)
+
+        Common.enemy_list.append(self.Enemy)
         
         pyxel.run(self.update, self.draw)
         
 
     def update(self):
+        Common.GameTimer += 1
+
         match Common.GameState:
         
             case Common.STATE_TITLE:

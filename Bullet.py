@@ -1,26 +1,30 @@
 import pyxel
 import Common
 
-BLT_SPEED = 8
+#BLT_SPEED = 8
 
 class Bullet:
-    def __init__(self, x, y, speed=5):
+    def __init__(self, x, y, w, h, speed=8):
         self.x = x
         self.y = y
-        #self.speed = 4
-        self.active = True  # 消すフラグ
+        self.w = w
+        self.h = h
 
-        pyxel.play(0, 0)  # 効果音再生
+        self.speed = speed
+
+        self.active = True  # アクティブフラグ
+
 
     def update(self):
-        self.y -= BLT_SPEED
-        if self.y < -8: # 画面外に出たら消す
-            self.active = False
+        self.y -= self.speed
+        if self.y < -16: # 画面外に出たら消す
+            self.active = False #実際のガベコレはplayer.pyでやってます
 
     def draw(self):
-        #pyxel.circ(self.x, self.y, 1, 7)  # 小さい白い弾
         pyxel.blt(self.x, self.y, Common.TILE_BANK0,
-            Common.SprList["BULLET"].x, Common.SprList["BULLET"].y,
-            8, 8, pyxel.COLOR_BLACK)
-        
+                Common.SprList["BULLET01"].x, Common.SprList["BULLET01"].y, 8, 8, pyxel.COLOR_BLACK)
+
+#        pyxel.blt(self.x, self.y, Common.TILE_BANK0,
+#                Common.SprList["BULLET02"].x, Common.SprList["BULLET02"].y, 8, 8, pyxel.COLOR_BLACK)
+   
 
