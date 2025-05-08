@@ -11,7 +11,6 @@ class Player:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.speed = 2
         self.width = 8
         self.height = 8
 
@@ -19,7 +18,10 @@ class Player:
         self.col_y = 2  # Collision Y
         self.col_w = 4  # Collision Width
         self.col_h = 4
+
+        self.speed = 1
         self.col_active = True
+
 
         self.SprName = "TOP"    #Drawing Sprite Name
 
@@ -73,18 +75,32 @@ class Player:
 
             pyxel.play(0, 0)  # 効果音再生
 
-            #self.bullets.append(Bullet(self.x-4, self.y-2, 8, 8))
-            #self.bullets.append(Bullet(self.x+4, self.y-2, 8, 8))
-
             Common.player_bullet_list.append(Bullet(self.x-4, self.y-2, 8, 8)) # 弾の情報をリストに追加
             Common.player_bullet_list.append(Bullet(self.x+4, self.y-2, 8, 8)) # 弾の情報をリストに追加
             
         # 弾の更新と削除
         for _bullet in Common.player_bullet_list:
             _bullet.update()
-        
-        #self.bullets = [b for b in self.bullets if b.active]
         Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
+
+        #プレイヤーと敵との当たり判定
+        for _enemy in Common.enemy_list:
+            if self.col_active and _enemy.active:
+
+                if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
+                                       _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
+
+                # if (self.x + self.col_x < _enemy.x + _enemy.col_x + _enemy.col_w and
+                #     self.x + self.col_x + self.col_w > _enemy.x + _enemy.col_x and
+                #     self.y + self.col_y < _enemy.y + _enemy.col_y + _enemy.col_h and
+                #     self.y + self.col_y + self.col_h > _enemy.y + _enemy.col_y):
+                    #print("Collision")
+                    Common.GameState = Common.STATE_GAMEOVER
+                    #Common.player_bullet_list.remove(_bullet)
+                    #Common.enemy_list.remove(_enemy)
+                    #break
+        #count = len(Common.player_bullet_list)
+        #print(count)
 
     
     def draw(self):
@@ -99,8 +115,8 @@ class Player:
             Common.SprList[self.ExtSpr].x, Common.SprList[self.ExtSpr].y, self.width, self.height, pyxel.COLOR_BLACK)
 
         # Collision Box
-        #pyxel.rect(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_GREEN)
-        
+        pyxel.rectb(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_GREEN)
+
 
         # 描画
         for _bullet in Common.player_bullet_list:
