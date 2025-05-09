@@ -6,6 +6,7 @@ from Bullet import Bullet
 ExtNames = ["EXT01", "EXT02", "EXT03", "EXT04"]
 ExtMax = len(ExtNames)
 
+SHOTTIMER = 7  # 弾の発射間隔
 
 class Player:
     def __init__(self, x, y):
@@ -21,7 +22,7 @@ class Player:
 
         self.speed = 1
         self.col_active = True
-
+        self.ShotTimer = SHOTTIMER
 
         self.SprName = "TOP"    #Drawing Sprite Name
 
@@ -32,14 +33,14 @@ class Player:
         #Bullet
 
     def update(self):
-        #Exhaust Animation
+        #Exhaust Animation --------
         self.ExtSpr = ExtNames[self.ExtIndex]
         
         self.ExtIndex += 1
         if self.ExtIndex >= ExtMax:
             self.ExtIndex = 0
 
-
+        #Movement -----------
         self.SprName = "TOP"
         dx = 0  #direction
         dy = 0
@@ -62,7 +63,6 @@ class Player:
             dx *= 0.6
             dy *= 0.6
 
-        # 移動
         self.x += dx * self.speed
         self.y += dy * self.speed
 
@@ -71,12 +71,14 @@ class Player:
         self.y = max(0, min(self.y, Common.WIN_HEIGHT - (self.height+8)))
         
         #弾の発射
-        if pyxel.btnp(pyxel.KEY_SPACE):
-
-            pyxel.play(0, 0)  # 効果音再生
-
-            Common.player_bullet_list.append(Bullet(self.x-4, self.y-2, 8, 8)) # 弾の情報をリストに追加
-            Common.player_bullet_list.append(Bullet(self.x+4, self.y-2, 8, 8)) # 弾の情報をリストに追加
+        if pyxel.btn(pyxel.KEY_SPACE):
+            if(self.ShotTimer <= 0):
+                pyxel.play(0, 0)  # 効果音再生
+                Common.player_bullet_list.append(Bullet(self.x-4, self.y-2, 8, 8)) # 弾の情報をリストに追加
+                Common.player_bullet_list.append(Bullet(self.x+4, self.y-2, 8, 8)) # 弾の情報をリストに追加
+                self.ShotTimer = SHOTTIMER  # 再発射までの時間をリセット
+        
+        self.ShotTimer -= 1  # 発射間隔のカウントダウン
             
         # 弾の更新と削除
         for _bullet in Common.player_bullet_list:
@@ -90,17 +92,7 @@ class Player:
                 if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
                                        _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
 
-                # if (self.x + self.col_x < _enemy.x + _enemy.col_x + _enemy.col_w and
-                #     self.x + self.col_x + self.col_w > _enemy.x + _enemy.col_x and
-                #     self.y + self.col_y < _enemy.y + _enemy.col_y + _enemy.col_h and
-                #     self.y + self.col_y + self.col_h > _enemy.y + _enemy.col_y):
-                    #print("Collision")
                     Common.GameState = Common.STATE_GAMEOVER
-                    #Common.player_bullet_list.remove(_bullet)
-                    #Common.enemy_list.remove(_enemy)
-                    #break
-        #count = len(Common.player_bullet_list)
-        #print(count)
 
     
     def draw(self):
@@ -116,7 +108,6 @@ class Player:
 
         # Collision Box
         pyxel.rectb(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_GREEN)
-
 
         # 描画
         for _bullet in Common.player_bullet_list:

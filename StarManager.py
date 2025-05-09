@@ -1,4 +1,3 @@
-# dots.py
 import random
 import pyxel
 import Common

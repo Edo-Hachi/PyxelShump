@@ -2,16 +2,19 @@ import pyxel
 import Common
 
 class Enemy:
-    def __init__(self, x, y, w=8, h=8):
+    def __init__(self, x, y, w=8, h=8, life = 1, score=10):
         self.x = x
         self.y = y
-        self.w = 8  # Sprite Width
-        self.h = 8  # Sprite Height
+        self.w = w  # Sprite Width
+        self.h = h  # Sprite Height
 
         self.col_x = 1 #Collision Box
         self.col_y = 1
         self.col_w = 6
         self.col_h = 6
+
+        self.Life = life
+        self.Score = score
 
         self.active = True
 
@@ -19,7 +22,7 @@ class Enemy:
 
     def update(self):
 
-        #self.y += 1  # 下方向に移動
+        self.y += 0.5  # 下方向に移動
 
         pass
 

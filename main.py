@@ -3,6 +3,7 @@ import random
 
 import Common
 from Enemy import Enemy
+from ExplodeManager import ExplodeManager
 
 
 from StarManager import StarManager
@@ -28,32 +29,39 @@ def draw_title(self):
 def update_playing(self):
     self.star_manager.update()
     self.player.update()
-    self.Enemy.update()
-
-    # for _enemy in Common.enemy_list:
-    #     if _enemy.active:
-    #         if Common.check_collision(self.player.x + self.player.col_x, self.player.y + self.player.col_y, self.player.col_w, self.player.col_h,
-    #                                    _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
 
 
-    #             self.collision_flg = True
+    #debug code Enemy Spawn
+    if Common.GameTimer % 100 == 0:
+        enemy_x = random.randint(0, Common.WIN_WIDTH - 8)
+        enemy_y = 8
+        _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 2, 100)
 
-                #print("Collision!")
+        Common.enemy_list.append(_Enemy)
+
+
+
+    #敵の更新処理
+    for _e in Common.enemy_list:
+            _e.update()
+
+    #ガベコレ(自弾とかに当たってたら消す)
+    Common.enemy_list = [e for e in Common.enemy_list if e.active]
+
+
 
 def draw_playing(self):
     pyxel.cls(pyxel.COLOR_NAVY)
+
     self.star_manager.draw()
     self.player.draw()
 
-    self.Enemy.draw()   
-    #draw_enemy(self)
+    for _e in Common.enemy_list:
+        _e.draw()
+    
+    #Draw HUD
+    pyxel.text(8, 0, "Score: " + str(Common.Score), 7)
 
-    #pyxel.text(5, 5, f"Score: {Common.Score}", 7)
-    #pyxel.text(5, 15, f"High Score: {Common.HighScore}", 7)
-
-    if self.collision_flg == True:
-        pyxel.text(5, 5, "Hit", 7)
-        self.collision_flg = False
 
 
 # Playing State ----------------------------------------
@@ -78,22 +86,25 @@ class App:
         Common.Score = 10
         Common.HighScore = 100
 
-        #debug code
-        #self.enemy_spr = 0
-        self.enemy_x = 64
-        self.enemy_y = 32
-        self.Enemy = Enemy(self.enemy_x, self.enemy_y, 8, 8)
+        #爆発パーティクル(Test)
+        self.Explode_mgr = ExplodeManager()
 
-        Common.enemy_list.append(self.Enemy)
         
 
-        self.collision_flg = False
+        #self.collision_flg = False
 
         pyxel.run(self.update, self.draw)
         
 
     def update(self):
         Common.GameTimer += 1
+
+        if pyxel.btn(pyxel.KEY_Z):
+            self.Explode_mgr.spawn_explosion(50, 50)
+            print("Z Key Pressed")
+
+        self.Explode_mgr.update()
+
 
         match Common.GameState:
         
@@ -115,6 +126,8 @@ class App:
      
    
     def draw(self):
+
+
         match Common.GameState:
             case Common.STATE_TITLE:
                 draw_title(self)
@@ -126,5 +139,7 @@ class App:
                 pass
             case Common.STATE_PAUSE:
                 pass
+
+        self.Explode_mgr.draw()
 
 App()
