@@ -1,5 +1,5 @@
-#import math
 from collections import namedtuple
+from ExplodeManager import ExplodeManager
 
 #Window size
 WIN_WIDTH = 128
@@ -28,6 +28,10 @@ enemy_list = []
 enemy_bullet_list = []
 player_bullet_list = []
 
+#Explosion Ctrl Manager
+explode_manager = ExplodeManager()
+
+
 def check_collision(x1, y1, w1, h1, x2, y2, w2, h2):
     # 各辺の位置を計算
     left1   = x1
@@ -51,14 +55,6 @@ def check_collision(x1, y1, w1, h1, x2, y2, w2, h2):
     return is_collision
 
 
-# def check_collision(x1,y1,w1,h1, x2,y2,w2,h2): 
-#     return (
-#         x1 < x2 + w2 and
-#         x1 + w1 > x2 and
-#         y1 < y2 + h2 and
-#         y1 + h1 > y2
-#     )
-
 #Sprite Location List
 # 8x8 sprites
 SpIdx =  namedtuple("SprIdx", ["x", "y"])
@@ -69,13 +65,13 @@ SprList = {
     "RIGHT" : SpIdx(24, 0),  # RIGHT
     "NULL" : SpIdx(32, 0),   # NULL
 
-    "BULLET01" : SpIdx(40, 0),      #BULLET
+    "BULLET01" : SpIdx(40, 0),  # BULLET
     "BULLET02" : SpIdx(48, 0),  
 
     "EXT01" : SpIdx(56, 0), # Ship Exhaust
-    "EXT02" : SpIdx(64, 0),
-    "EXT03" : SpIdx(72, 0),
-    "EXT04" : SpIdx(80, 0),
+    "EXT02" : SpIdx(64, 0), # Ship Exhaust
+    "EXT03" : SpIdx(72, 0), # Ship Exhaust
+    "EXT04" : SpIdx(80, 0), # Ship Exhaust
 
     "NULL" : SpIdx(88, 0),
     "NULL" : SpIdx(96, 0),

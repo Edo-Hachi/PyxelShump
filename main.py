@@ -3,7 +3,7 @@ import random
 
 import Common
 from Enemy import Enemy
-from ExplodeManager import ExplodeManager
+#from ExplodeManager import ExplodeManager
 
 
 from StarManager import StarManager
@@ -87,7 +87,7 @@ class App:
         Common.HighScore = 100
 
         #爆発パーティクル(Test)
-        self.Explode_mgr = ExplodeManager()
+        #self.Explode_mgr = ExplodeManager()
 
         
 
@@ -99,11 +99,12 @@ class App:
     def update(self):
         Common.GameTimer += 1
 
+        #ばくはつだーーーーーーーーーーーーーーーーーーーー
         if pyxel.btn(pyxel.KEY_Z):
-            self.Explode_mgr.spawn_explosion(50, 50)
-            print("Z Key Pressed")
-
-        self.Explode_mgr.update()
+            Common.explode_manager.spawn_explosion(50,50)
+            #self.Explode_mgr.spawn_explosion(50, 50)
+            #print("Z Key Pressed")
+        #ばくはつだーーーーーーーーーーーーーーーーーーーー
 
 
         match Common.GameState:
@@ -121,6 +122,11 @@ class App:
         #Esc Key Down
         if pyxel.btn(pyxel.KEY_ESCAPE):
             pyxel.quit()
+
+        #ばくはつだーーーーーーーーーーーーーーーーーーーー
+        Common.explode_manager.update()
+        #ばくはつだーーーーーーーーーーーーーーーーーーーー
+
 
         #self.player.update()
      
@@ -140,6 +146,9 @@ class App:
             case Common.STATE_PAUSE:
                 pass
 
-        self.Explode_mgr.draw()
+        #self.Explode_mgr.draw()
+        #ばくはつだーーーーーーーーーーーーーーーーーーーー
+        Common.explode_manager.draw()
+        #ばくはつだーーーーーーーーーーーーーーーーーーーー
 
 App()

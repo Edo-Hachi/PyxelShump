@@ -31,6 +31,8 @@ class Bullet:
             if _enemy.active:
                 if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
                                         _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
+                    
+                    #弾を消す
                     self.active = False #実際のガベコレはplayer.pyでやってます
 
                     _enemy.Life -= 1
@@ -38,8 +40,14 @@ class Bullet:
                         Common.Score += _enemy.Score
                         #pyxel.play(1, 0)  # 効果音再生
                         pyxel.play(0, 1)  # 効果音再生
+                        Common.explode_manager.spawn_explosion(_enemy.x,_enemy.y)
 
                         _enemy.active = False #実際のガベコレはplayer.pyでやってます
+                    else:
+                        _enemy.flash = 6
+                        #pyxel.play(1, 0)  # 効果音再生
+                        pyxel.play(0, 1)  # 効果音再生
+                        #Common.explode_manager.spawn_explosion(_enemy.x,_enemy.y)
 
     
     def draw(self):
