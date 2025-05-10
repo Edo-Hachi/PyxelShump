@@ -38,14 +38,12 @@ class Bullet:
                     _enemy.Life -= 1
                     if _enemy.Life <= 0:   
                         Common.Score += _enemy.Score
-                        #pyxel.play(1, 0)  # 効果音再生
                         pyxel.play(0, 1)  # 効果音再生
                         Common.explode_manager.spawn_explosion(_enemy.x,_enemy.y)
 
                         _enemy.active = False #実際のガベコレはplayer.pyでやってます
                     else:
                         _enemy.flash = 6
-                        #pyxel.play(1, 0)  # 効果音再生
                         pyxel.play(0, 1)  # 効果音再生
                         #Common.explode_manager.spawn_explosion(_enemy.x,_enemy.y)
 

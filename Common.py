@@ -86,4 +86,3 @@ SprList = {
     "ENEMY01_3" : SpIdx(32, 8),   #Enemy01_3
 
 }
-

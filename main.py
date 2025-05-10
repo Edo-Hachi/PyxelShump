@@ -39,11 +39,10 @@ def update_playing(self):
 
         Common.enemy_list.append(_Enemy)
 
-
-
     #敵の更新処理
     for _e in Common.enemy_list:
             _e.update()
+
 
     #ガベコレ(自弾とかに当たってたら消す)
     Common.enemy_list = [e for e in Common.enemy_list if e.active]

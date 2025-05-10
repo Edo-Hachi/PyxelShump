@@ -83,7 +83,21 @@ class Player:
         # 弾の更新と削除
         for _bullet in Common.player_bullet_list:
             _bullet.update()
+
+
         Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
+
+        # # 新しく空のリストを用意
+        # new_bullet_list = []
+
+        # # もともとの player_bullet_list を1つずつ確認
+        # for b in Common.player_bullet_list:
+        #     # b が active（有効）ならば新しいリストに追加
+        #     if b.active:
+        #         new_bullet_list.append(b)
+
+        # # 最後に Common.player_bullet_list を更新する
+        # Common.player_bullet_list = new_bullet_list
 
         #プレイヤーと敵との当たり判定
         for _enemy in Common.enemy_list:
