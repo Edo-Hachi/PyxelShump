@@ -16,45 +16,59 @@ class Explode_RECT:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.w = random.randint(2, 6)
+        self.w = random.randint(2, 7)
         self.h = random.randint(2, 6)   
         self.dx = random.uniform(-1.5, 1.5)
         self.dy = random.uniform(-1.5, 1.5)
-        self.life = random.randint(3, 20)   #弾の寿命大きいと長く飛び散ります
+        self.life = random.randint(15, 25)   #弾の寿命大きいと長く飛び散ります
         self.col = random.randint(8, 15)
+
+        #First Flash
+        self.orgx = x
+        self.orgy = y
+        self.FirstFlash = 4
 
     def update(self):
             self.x += self.dx
             self.y += self.dy
 
+            #パーティクルを小さくしていく
             self.w -= 0.05
             self.h -= 0.05  
 
             self.life -= 1
 
             #爆発パーティクルの速度減衰
-            self.dx *= 0.90
+            self.dx *= 0.95
             self.dy *= 0.90
 
 
     def draw(self):
         if self.life > 0:
+            #最初だけ白でフラッシュを表示
+            if 0 < self.FirstFlash:
+                pyxel.rect(self.orgx-8, self.orgy-8, 16, 16, pyxel.COLOR_WHITE)
+                self.FirstFlash -=1
+
                 #pyxel.pset(int(self.x), int(self.y), self.col)
-                _color = pyxel.COLOR_WHITE
-                
-                if 15 < self.life:
-                    _color = pyxel.COLOR_WHITE
-                elif 10 < self.life and self.life <= 14:
-                    _color = pyxel.COLOR_ORANGE
-                elif 6 < self.life and self.life <= 10:
-                    _color = pyxel.COLOR_YELLOW
-                elif 3 < self.life and self.life <= 5:
-                    _color = pyxel.COLOR_BROWN
-                elif 0 < self.life and self.life <= 3:
-                    _color = pyxel.COLOR_GRAY
+            _color = pyxel.COLOR_WHITE
 
+            if self.life < 18:
+                _color = pyxel.COLOR_YELLOW
 
-                pyxel.rect(int(self.x), int(self.y), self.w, self.h, _color)
+            if self.life < 13:
+                _color = pyxel.COLOR_ORANGE
+
+            if self.life < 9:
+                _color = pyxel.COLOR_BROWN
+
+            if self.life < 5:
+                _color = pyxel.COLOR_GRAY
+            
+            if self.life < 1:
+                _color = pyxel.COLOR_NAVY
+
+            pyxel.rect(int(self.x), int(self.y), int(self.w), int(self.h), _color)
 
     @property
     def is_alive(self):
