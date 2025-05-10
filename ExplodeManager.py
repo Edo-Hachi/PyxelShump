@@ -39,8 +39,8 @@ class Explode_RECT:
             self.life -= 1
 
             #爆発パーティクルの速度減衰
-            self.dx *= 0.95
-            self.dy *= 0.90
+            self.dx *= 0.87
+            self.dy *= 0.87
 
 
     def draw(self):
