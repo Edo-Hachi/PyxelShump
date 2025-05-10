@@ -8,6 +8,29 @@ ExtMax = len(ExtNames)
 
 SHOTTIMER = 7  # 弾の発射間隔
 
+MuzlNames = ["MUZL01", "MUZL02", "MUZL03"]
+#MuzlMax = len(ExtNames)
+#MuzlList = []
+
+class MuzzleFlash:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.life = 3  # Flash duration
+        self.active = True
+    
+    def update(self):
+        self.life -= 1
+        if self.life <  0:
+            self.active = False
+    
+    def draw(self):
+        if self.active:
+            pyxel.blt(self.x, self.y, Common.TILE_BANK0,
+                      Common.SprList[MuzlNames[self.life]].x, Common.SprList[MuzlNames[self.life]].y, 8, 8, pyxel.COLOR_BLACK)
+
+
+
 class Player:
     def __init__(self, x, y):
         self.x = x
@@ -29,8 +52,9 @@ class Player:
         self.ExtIndex = 0
         self.ExtSpr = "EXT01"  # Exhaust Sprite Name
 
-        #self.bullets = []  # Bullet Manage list
-        #Bullet
+        self.MuzlList = []
+
+
 
     def update(self):
         #Exhaust Animation --------
@@ -74,18 +98,27 @@ class Player:
         if pyxel.btn(pyxel.KEY_SPACE):
             if(self.ShotTimer <= 0):
                 pyxel.play(0, 0)  # 効果音再生
-                Common.player_bullet_list.append(Bullet(self.x-4, self.y-2, 8, 8)) # 弾の情報をリストに追加
-                Common.player_bullet_list.append(Bullet(self.x+4, self.y-2, 8, 8)) # 弾の情報をリストに追加
+                Common.player_bullet_list.append(Bullet(self.x-4, self.y-4, 8, 8)) # 弾の情報をリストに追加
+                Common.player_bullet_list.append(Bullet(self.x+4, self.y-4, 8, 8)) # 弾の情報をリストに追加
                 self.ShotTimer = SHOTTIMER  # 再発射までの時間をリセット
+
+                self.MuzlList.append(MuzzleFlash(self.x-4, self.y-6))  # Muzzle Flashを追加
+                self.MuzlList.append(MuzzleFlash(self.x+4, self.y-6))  # Muzzle Flashを追加
+
         
         self.ShotTimer -= 1  # 発射間隔のカウントダウン
             
         # 弾の更新と削除
         for _bullet in Common.player_bullet_list:
             _bullet.update()
-
-
         Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
+
+        # Muzzle Flashの描画、削除
+        for _muzzle in self.MuzlList:
+            _muzzle.update()
+        
+        self.MuzlList = [m for m in self.MuzlList if m.active]
+
 
         # # 新しく空のリストを用意
         # new_bullet_list = []
@@ -120,10 +153,16 @@ class Player:
             #Common.SprList[ExtNames[self.ExtIndex]].x, Common.SprList[ExtNames[self.ExtIndex]].y, self.width, self.height, pyxel.COLOR_BLACK)
             Common.SprList[self.ExtSpr].x, Common.SprList[self.ExtSpr].y, self.width, self.height, pyxel.COLOR_BLACK)
 
-        # Collision Box
-        pyxel.rectb(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_GREEN)
 
-        # 描画
+        #Muzzle Flash
+        for _muzzle in self.MuzlList:
+            _muzzle.draw()
+
+        #弾描画
         for _bullet in Common.player_bullet_list:
             _bullet.draw()
         
+        
+        # Collision Box 
+        if Common.DEBUG:
+            pyxel.rectb(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_GREEN)

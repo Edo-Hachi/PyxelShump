@@ -27,34 +27,31 @@ class Bullet:
             self.active = False #実際のガベコレはplayer.pyでやってます
 
         #弾とエネミーの接触判定
-        for _enemy in Common.enemy_list:
-            if _enemy.active:
-                if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
-                                        _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
+        # for _enemy in Common.enemy_list:
+        #     if _enemy.active:
+        #         if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
+        #                                 _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
                     
-                    #弾を消す
-                    self.active = False #実際のガベコレはplayer.pyでやってます
+        #             #弾を消す
+        #             self.active = False #実際のガベコレはplayer.pyでやってます
 
-                    _enemy.Life -= 1
-                    if _enemy.Life <= 0:   
-                        Common.Score += _enemy.Score
-                        pyxel.play(0, 1)  # 効果音再生
-                        Common.explode_manager.spawn_explosion(_enemy.x,_enemy.y)
+        #             _enemy.Life -= 1
+        #             if _enemy.Life <= 0:   
+        #                 Common.Score += _enemy.Score
+        #                 pyxel.play(0, 1)  # 効果音再生
+        #                 Common.explode_manager.spawn_explosion(_enemy.x,_enemy.y)
 
-                        _enemy.active = False #実際のガベコレはplayer.pyでやってます
-                    else:
-                        _enemy.flash = 6
-                        pyxel.play(0, 1)  # 効果音再生
-                        #Common.explode_manager.spawn_explosion(_enemy.x,_enemy.y)
+        #                 _enemy.active = False #実際のガベコレはplayer.pyでやってます
+        #             else:
+        #                 _enemy.flash = 6
+        #                 pyxel.play(0, 1)  # 効果音再生
 
     
     def draw(self):
         pyxel.blt(self.x, self.y, Common.TILE_BANK0,
                 Common.SprList["BULLET01"].x, Common.SprList["BULLET01"].y, 8, 8, pyxel.COLOR_BLACK)
-
-#        pyxel.blt(self.x, self.y, Common.TILE_BANK0,
-#                Common.SprList["BULLET02"].x, Common.SprList["BULLET02"].y, 8, 8, pyxel.COLOR_BLACK)
    
-       # Collision Box
-        pyxel.rectb(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_RED)
+        # Collision Box
+        if Common.DEBUG:
+            pyxel.rectb(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_RED)
 

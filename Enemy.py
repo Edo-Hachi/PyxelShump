@@ -26,7 +26,27 @@ class Enemy:
 
         self.y += 0.5  # 下方向に移動
 
-        pass
+        # 弾との衝突判定
+        for bullet in Common.player_bullet_list:
+            if bullet.active:  # 弾がアクティブなら
+                if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
+                                          bullet.x + bullet.col_x, bullet.y + bullet.col_y, bullet.col_w, bullet.col_h):
+                    self.on_hit(bullet)
+
+
+    def on_hit(self, bullet):
+        # 弾を消す
+        bullet.active = False
+        self.Life -= 1
+        if self.Life <= 0:
+            self.active = False  # エネミーを非アクティブに
+            Common.Score += self.Score  # スコア加算
+            pyxel.play(0, 1)  # 効果音再生
+            Common.explode_manager.spawn_explosion(self.x, self.y)
+        else:
+            self.flash = 6  # 点滅処理
+            pyxel.play(0, 1)  # 効果音再生
+
 
     def draw(self):
         if self.flash > 0:
@@ -43,4 +63,5 @@ class Enemy:
         pyxel.pal()
 
         # Collision Box
-        #pyxel.rectb(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_RED)
+        if Common.DEBUG:
+            pyxel.rectb(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_RED)

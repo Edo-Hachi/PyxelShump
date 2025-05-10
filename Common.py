@@ -1,6 +1,8 @@
 from collections import namedtuple
 from ExplodeManager import ExplodeManager
 
+DEBUG = True #or False
+
 #Window size
 WIN_WIDTH = 128
 WIN_HEIGHT = 128
@@ -73,9 +75,9 @@ SprList = {
     "EXT03" : SpIdx(72, 0), # Ship Exhaust
     "EXT04" : SpIdx(80, 0), # Ship Exhaust
 
-    "NULL" : SpIdx(88, 0),
-    "NULL" : SpIdx(96, 0),
-    "NULL" : SpIdx(104, 0),
+    "MUZL01" : SpIdx(88, 0),  #MuzzleFlash01
+    "MUZL02" : SpIdx(96, 0),  #MuzzleFlash02
+    "MUZL03" : SpIdx(104, 0),  #MuzzleFlash03
     "NULL" : SpIdx(112, 0),
     "NULL" : SpIdx(120, 0),
 
