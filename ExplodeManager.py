@@ -17,6 +17,8 @@ class Explde_CIRCLE:
         self.orgy = y
         self.FirstFlash = 4
 
+        self.FirstCircle = 1
+
     def update(self):
             self.x += self.dx
             self.y += self.dy
@@ -38,6 +40,11 @@ class Explde_CIRCLE:
             #pyxel.rect(self.orgx-8, self.orgy-8, 16, 16, pyxel.COLOR_WHITE)
             pyxel.circ(self.orgx, self.orgy, int(8), pyxel.COLOR_WHITE)
             self.FirstFlash -= 1
+        
+        #ソニックブーム的な円
+        if self.FirstCircle < 20:
+            pyxel.circb(self.orgx, self.orgy, self.FirstCircle, pyxel.COLOR_WHITE)
+            self.FirstCircle+=2
 
         _color = pyxel.COLOR_WHITE
 
@@ -73,13 +80,16 @@ class Explode_RECT:
         self.h = random.randint(2, 6)   
         self.dx = random.uniform(-1.5, 1.5)
         self.dy = random.uniform(-1.5, 1.5)
-        self.life = random.randint(15, 25)   #弾の寿命大きいと長く飛び散ります
+        self.life = random.randint(10, 25)   #弾の寿命大きいと長く飛び散ります
         self.col = random.randint(8, 15)
 
         #First Flash
         self.orgx = x
         self.orgy = y
         self.FirstFlash = 4
+
+        self.FirstCircle = 1
+
 
     def update(self):
             self.x += self.dx
@@ -103,6 +113,12 @@ class Explode_RECT:
                 pyxel.rect(self.orgx-8, self.orgy-8, 16, 16, pyxel.COLOR_WHITE)
                 self.FirstFlash -= 1
 
+            #ソニックブーム的な円
+            if self.FirstCircle < 20:
+                pyxel.circb(self.orgx, self.orgy, self.FirstCircle, pyxel.COLOR_WHITE)
+                self.FirstCircle+=2
+
+
             _color = pyxel.COLOR_WHITE
 
             if self.life < 18:
@@ -121,7 +137,6 @@ class Explode_RECT:
                 _color = pyxel.COLOR_NAVY
 
             pyxel.rect(int(self.x), int(self.y), int(self.w), int(self.h), _color)
-
     @property
     def is_alive(self):
         return self.life > 0
@@ -153,17 +168,37 @@ class Explode_DOT:
     def is_alive(self):
         return self.life > 0
 
-
 class ExplodeManager:
     def __init__(self):
         self.explosions = []
+        
+        DOT = 0
+        CIRCLE = 1
+        RECT = 2
 
-    def spawn_explosion(self, x, y, count=20):
-        #for _ in range(count):
-        for r in range(count):
-            #self.explosions.append(Explode_DOT(x + 4, y + 4))   #8x8スプライトの中心あたりから発生
-            #self.explosions.append(Explode_RECT(x + 4, y + 4))   #8x8スプライトの中心あたりから発生
-            self.explosions.append(Explde_CIRCLE(x + 4, y + 4))   #8x8スプライトの中心あたりから発生
+    def SpawnExplode_Rect(self, x, y, cnt=20):
+        for _ in range(cnt):
+            self.explosions.append(Explode_RECT(x, y))
+
+    def SpawnExplode_Dot(self, x, y, cnt=20):
+        for _ in range(cnt):
+            self.explosions.append(Explode_DOT(x + 4, y + 4))
+
+
+    def SpawnExplode_Circle(self, x, y, cnt=20):
+        for _ in range(cnt):
+            self.explosions.append(Explde_CIRCLE(x + 4, y + 4))
+    
+
+    # def spawn_explosion(self, x, y, count = 20, exp=0):
+    #     for _ in range(count):
+    #         if exp == self.DOT:
+    #             self.explosions.append(Explode_DOT(x + 4, y + 4))
+    #         elif exp == self.CIRCLE:
+    #             self.explosions.append(Explde_CIRCLE(x + 4, y + 4))
+    #         elif exp == self.RECT:
+    #             self.explosions.append(Explode_RECT(x + 4, y + 4))
+
 
     def update(self):
         for exp in self.explosions:

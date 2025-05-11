@@ -2,7 +2,7 @@ import pyxel
 import Common
 
 class Enemy:
-    def __init__(self, x, y, w=8, h=8, life = 1, score=10):
+    def __init__(self, x, y, w=8, h=    8, life = 1, score=10):
         self.x = x
         self.y = y
         self.w = w  # Sprite Width
@@ -26,13 +26,6 @@ class Enemy:
 
         self.y += 0.5  # 下方向に移動
 
-        # 弾との衝突判定
-        # for bullet in Common.player_bullet_list:
-        #     if bullet.active:  # 弾がアクティブなら
-        #         if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
-        #                                   bullet.x + bullet.col_x, bullet.y + bullet.col_y, bullet.col_w, bullet.col_h):
-        #             self.on_hit(bullet)
-
 
     def on_hit(self, bullet):
         # 弾を消す
@@ -42,7 +35,7 @@ class Enemy:
             self.active = False  # エネミーを非アクティブに
             Common.Score += self.Score  # スコア加算
             pyxel.play(0, 1)  # 効果音再生
-            Common.explode_manager.spawn_explosion(self.x, self.y)
+            Common.explode_manager.SpawnExplode_Rect(self.x + 4, self.y + 4, 20)
         else:
             self.flash = 6  # 点滅処理
             pyxel.play(0, 2)  # 効果音再生
