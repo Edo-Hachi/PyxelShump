@@ -89,9 +89,9 @@ class Player:
         self.ShotTimer -= 1  # 発射間隔のカウントダウン
             
         # 弾の更新と削除
-        for _bullet in Common.player_bullet_list:
-            _bullet.update()
-        Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
+#        for _bullet in Common.player_bullet_list:
+#            _bullet.update()
+#        Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
 
         #プレイヤーと敵との当たり判定
         for _enemy in Common.enemy_list:

@@ -26,26 +26,66 @@ def draw_title(self):
 
 # Playing State ----------------------------------------
 
+# def update_playing(self):
+#     self.star_manager.update()
+#     self.player.update()
+
+
+#     #debug code Enemy Spawn
+#     if Common.GameTimer % 100 == 0:
+#         enemy_x = random.randint(0, Common.WIN_WIDTH - 8)
+#         enemy_y = 8
+#         _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 2, 100)
+
+#         Common.enemy_list.append(_Enemy)
+
+#     #敵の更新処理
+#     for _e in Common.enemy_list:
+#             _e.update()
+
+
+#     #ガベコレ(自弾とかに当たってたら消す)
+#     Common.enemy_list = [e for e in Common.enemy_list if e.active]
+
+
 def update_playing(self):
     self.star_manager.update()
     self.player.update()
 
-
-    #debug code Enemy Spawn
-    if Common.GameTimer % 100 == 0:
+    # --- デバッグ用敵スポーン ---
+    if Common.GameTimer % 50 == 0:
         enemy_x = random.randint(0, Common.WIN_WIDTH - 8)
         enemy_y = 8
         _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 2, 100)
-
         Common.enemy_list.append(_Enemy)
 
-    #敵の更新処理
+    # --- 敵の移動処理だけを行う（衝突判定は外す） ---
     for _e in Common.enemy_list:
-            _e.update()
+        _e.update()
 
+    # --- 弾の移動処理（プレイヤーの弾） ---
+    for _b in Common.player_bullet_list:
+        _b.update()
 
-    #ガベコレ(自弾とかに当たってたら消す)
+    # --- 衝突判定：プレイヤー弾 vs 敵 ---
+    for bullet in Common.player_bullet_list:
+        if not bullet.active:
+            continue  # 非アクティブな弾はスキップ
+
+        for enemy in Common.enemy_list:
+            if not enemy.active:
+                continue  # 非アクティブな敵はスキップ
+
+            # 衝突しているかをチェック
+            if Common.check_collision(
+                bullet.x + bullet.col_x, bullet.y + bullet.col_y, bullet.col_w, bullet.col_h,
+                enemy.x + enemy.col_x, enemy.y + enemy.col_y, enemy.col_w, enemy.col_h
+            ):
+                enemy.on_hit(bullet)  # ヒット処理（敵のライフ減少、爆発など）
+
+    # --- ガベージコレクション（死んだ敵の除去） ---
     Common.enemy_list = [e for e in Common.enemy_list if e.active]
+    Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]  # ← 弾も除去推奨
 
 
 

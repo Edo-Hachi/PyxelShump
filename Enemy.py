@@ -27,11 +27,11 @@ class Enemy:
         self.y += 0.5  # 下方向に移動
 
         # 弾との衝突判定
-        for bullet in Common.player_bullet_list:
-            if bullet.active:  # 弾がアクティブなら
-                if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
-                                          bullet.x + bullet.col_x, bullet.y + bullet.col_y, bullet.col_w, bullet.col_h):
-                    self.on_hit(bullet)
+        # for bullet in Common.player_bullet_list:
+        #     if bullet.active:  # 弾がアクティブなら
+        #         if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
+        #                                   bullet.x + bullet.col_x, bullet.y + bullet.col_y, bullet.col_w, bullet.col_h):
+        #             self.on_hit(bullet)
 
 
     def on_hit(self, bullet):

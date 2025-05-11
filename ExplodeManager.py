@@ -1,16 +1,6 @@
 import pyxel
 import random
 from dataclasses import dataclass
-#from enum import Enum, auto
-
-
-#MAX_EXPLOSIONS = 200
-
-# class ParticleType(Enum):
-#     PSET = auto()
-#     RECT = auto()
-#     CIRCLE = auto()
-
 
 class Explode_RECT:
     def __init__(self, x, y):
@@ -48,9 +38,8 @@ class Explode_RECT:
             #最初だけ白でフラッシュを表示
             if 0 < self.FirstFlash:
                 pyxel.rect(self.orgx-8, self.orgy-8, 16, 16, pyxel.COLOR_WHITE)
-                self.FirstFlash -=1
+                self.FirstFlash -= 1
 
-                #pyxel.pset(int(self.x), int(self.y), self.col)
             _color = pyxel.COLOR_WHITE
 
             if self.life < 18:
@@ -116,7 +105,6 @@ class ExplodeManager:
         for exp in self.explosions:
             exp.update()
         self.explosions = [exp for exp in self.explosions if exp.is_alive]
-        #self.explosions = self.explosions[-MAX_EXPLOSIONS:]
 
     def draw(self):
         for exp in self.explosions:
