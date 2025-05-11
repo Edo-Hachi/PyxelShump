@@ -1,5 +1,6 @@
 import pyxel
 import Common
+import math
 
 from Bullet import Bullet
 
@@ -10,6 +11,8 @@ SHOTTIMER = 8  # 弾の発射間隔
 
 MuzlNames = ["MUZL01", "MUZL02", "MUZL03"] #0-2
 MuzlStarIndex = 2
+
+EXPLODE_TIMER=180
 
 class Player:
     def __init__(self, x, y):
@@ -27,12 +30,14 @@ class Player:
         self.col_active = True
         self.ShotTimer = SHOTTIMER
 
+        self.ExplodeCoolTimer = -1 #EXPLODE_TIMER
+        self.NowExploding = False
+
         self.SprName = "TOP"    #Drawing Sprite Name
 
         self.ExtIndex = 0
         self.ExtSpr = "EXT01"  # Exhaust Sprite Name
 
-        #self.MuzlList = []
         self.MuzlFlash = 0  # Muzzle Flash List
 
 
@@ -93,19 +98,46 @@ class Player:
 #            _bullet.update()
 #        Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
 
-        #プレイヤーと敵との当たり判定
-        for _enemy in Common.enemy_list:
-            if self.col_active and _enemy.active:
+        #プレイヤーと敵との当たり判定(ExplodeCoolTimerがプラス値ならクールタイム中)
+        if self.ExplodeCoolTimer < 0:
+            for _enemy in Common.enemy_list:
+                if self.col_active and _enemy.active:
 
-                if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
-                                       _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
+                    if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
+                                        _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
 
-                    Common.GameState = Common.STATE_GAMEOVER
+                        #爆発エフェクト   
+                        Common.explode_manager.SpawnExplode_Circle(self.x+4, self.y + 4, 20)
+                        #一度接触すると3秒クールタイム
+                        self.ExplodeCoolTimer = EXPLODE_TIMER
+                        self.NowExploding = True
+
+                    #Common.GameState = Common.STATE_GAMEOVER
+        else:
+            self.NowExploding = False
+            #点滅処理とか
+            pass
+            self.ExplodeCoolTimer-=1
 
     
     def draw(self):
 
-        #Player Ship
+        if self.ExplodeCoolTimer < 0:
+            print("Ship Active")
+            pyxel.blt(self.x, self.y, Common.TILE_BANK0,
+                Common.SprList[self.SprName].x, Common.SprList[self.SprName].y, self.width, self.height, pyxel.COLOR_BLACK)
+        else:
+            print("Cool Time")
+            if math.sin(Common.GameTimer/3) < 0:
+                for n in range(1, 15):
+                    pyxel.pal(n,pyxel.COLOR_YELLOW)
+
+            pyxel.blt(self.x, self.y, Common.TILE_BANK0,
+                Common.SprList[self.SprName].x, Common.SprList[self.SprName].y, self.width, self.height, pyxel.COLOR_BLACK)
+
+        
+
+
         pyxel.blt(self.x, self.y, Common.TILE_BANK0,
             Common.SprList[self.SprName].x, Common.SprList[self.SprName].y, self.width, self.height, pyxel.COLOR_BLACK)
 

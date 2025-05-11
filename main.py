@@ -3,8 +3,6 @@ import random
 
 import Common
 from Enemy import Enemy
-#from ExplodeManager import ExplodeManager
-
 
 from StarManager import StarManager
 from Player import Player
@@ -37,7 +35,7 @@ def update_playing(self):
     if Common.GameTimer % 50 == 0:
         enemy_x = random.randint(0, Common.WIN_WIDTH - 8)
         enemy_y = 8
-        _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 2, 100)
+        _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100)
         Common.enemy_list.append(_Enemy)
 
     # --- 敵の移動処理だけを行う（衝突判定は外す） ---
@@ -141,7 +139,7 @@ class App:
                 update_playing(self)
             case Common.STATE_GAMEOVER:
                 #print("Game Over")
-                pass
+                pass     
             case Common.STATE_PAUSE:
                 pass
 
