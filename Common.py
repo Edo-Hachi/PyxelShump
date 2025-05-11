@@ -1,6 +1,6 @@
 from collections import namedtuple
 from ExplodeManager import ExpMan
-#from enum import Enum
+from enum import Enum
 
 VERSION = "0.1.2"
 
@@ -33,7 +33,7 @@ enemy_list = []
 enemy_bullet_list = []
 player_bullet_list = []
 
-#Explosion Ctrl Manager
+#パーティクル管理オブジェクト
 explode_manager = ExpMan()
 
 def check_collision(x1, y1, w1, h1, x2, y2, w2, h2):

@@ -38,7 +38,7 @@ class Player:
         self.ExtIndex = 0
         self.ExtSpr = "EXT01"  # Exhaust Sprite Name
 
-        self.MuzlFlash = 0  # Muzzle Flash List
+        self.MuzlFlash = -1  # Muzzle Flash List
 
 
 
@@ -92,11 +92,6 @@ class Player:
 
         
         self.ShotTimer -= 1  # 発射間隔のカウントダウン
-            
-        # 弾の更新と削除
-#        for _bullet in Common.player_bullet_list:
-#            _bullet.update()
-#        Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
 
         #プレイヤーと敵との当たり判定(ExplodeCoolTimerがプラス値ならクールタイム中)
         if self.ExplodeCoolTimer < 0:
@@ -108,6 +103,7 @@ class Player:
 
                         #爆発エフェクト   
                         Common.explode_manager.SpawnExplode_Circle(self.x + 4, self.y + 4, 20)
+
                         #一度接触すると3秒クールタイム
                         self.ExplodeCoolTimer = EXPLODE_TIMER
                         self.NowExploding = True
@@ -123,23 +119,15 @@ class Player:
     def draw(self):
 
         if self.ExplodeCoolTimer < 0:
-            #print("Ship Active")
-            pyxel.blt(self.x, self.y, Common.TILE_BANK0,
-                Common.SprList[self.SprName].x, Common.SprList[self.SprName].y, self.width, self.height, pyxel.COLOR_BLACK)
+            pyxel.pal()
         else:
-            #print("Cool Time")
             if math.sin(Common.GameTimer/3) < 0:
                 for n in range(1, 15):
                     pyxel.pal(n,pyxel.COLOR_YELLOW)
 
-            pyxel.blt(self.x, self.y, Common.TILE_BANK0,
-                Common.SprList[self.SprName].x, Common.SprList[self.SprName].y, self.width, self.height, pyxel.COLOR_BLACK)
-
-        
-
-
+        #Player Ship
         pyxel.blt(self.x, self.y, Common.TILE_BANK0,
-            Common.SprList[self.SprName].x, Common.SprList[self.SprName].y, self.width, self.height, pyxel.COLOR_BLACK)
+                Common.SprList[self.SprName].x, Common.SprList[self.SprName].y, self.width, self.height, pyxel.COLOR_BLACK)
 
         #Exhaust
         pyxel.blt(self.x, self.y+8, Common.TILE_BANK0,

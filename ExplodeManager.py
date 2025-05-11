@@ -1,6 +1,7 @@
 import pyxel
 import random
-from dataclasses import dataclass
+#from dataclasses import dataclass
+#from Common import ExpType
 
 class Explde_CIRCLE:
     def __init__(self, x, y, r=10):
@@ -69,8 +70,6 @@ class Explde_CIRCLE:
     @property
     def is_alive(self):
         return self.life > 0
-
-
 
 class Explode_RECT:
     def __init__(self, x, y):
@@ -168,38 +167,52 @@ class Explode_DOT:
     def is_alive(self):
         return self.life > 0
 
+class Explode_DOT_REFRECT:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.dx = random.uniform(-1.5, 1.5)
+        self.dy = random.uniform(0, 1)
+        self.life = random.randint(10,25)   #弾の寿命大きいと長く飛び散ります
+        self.col = pyxel.COLOR_WHITE #random.randint(8, 15)
+
+    def update(self):
+        self.x += self.dx
+        self.y += self.dy
+        self.life -= 1
+
+        #爆発パーティクルの速度減衰
+        self.dx *= 0.95
+        self.dy *= 0.90
+
+    def draw(self):
+        if self.life > 0:
+            pyxel.pset(int(self.x), int(self.y), self.col)
+
+    @property
+    def is_alive(self):
+        return self.life > 0
+
 # class ExplodeManager:
 class ExpMan:
     def __init__(self):
         self.explosions = []
-        
-        # DOT = 0
-        # CIRCLE = 1
-        # RECT = 2
 
-    def SpawnExplode_Rect(self, x, y, cnt=20):
+    def SpawnExplode_Rect(self, x, y, cnt = 20):
         for c in range(cnt):
             self.explosions.append(Explode_RECT(x, y))
 
-    def SpawnExplode_Dot(self, x, y, cnt=20):
+    def SpawnExplode_Dot(self, x, y, cnt = 20):
         for c in range(cnt):
             self.explosions.append(Explode_DOT(x, y))
 
-
-    def SpawnExplode_Circle(self, x, y, cnt=20):
+    def SpawnExplode_Circle(self, x, y, cnt =20):
         for c in range(cnt):
             self.explosions.append(Explde_CIRCLE(x, y))
     
-
-    # def spawn_explosion(self, x, y, count = 20, exp=0):
-    #     for _ in range(count):
-    #         if exp == self.DOT:
-    #             self.explosions.append(Explode_DOT(x + 4, y + 4))
-    #         elif exp == self.CIRCLE:
-    #             self.explosions.append(Explde_CIRCLE(x + 4, y + 4))
-    #         elif exp == self.RECT:
-    #             self.explosions.append(Explode_RECT(x + 4, y + 4))
-
+    def SpawnExplode_DotRefrect(self, x, y, cnt = 5):
+        for c in range(cnt):
+            self.explosions.append(Explode_DOT_REFRECT(x, y))
 
     def update(self):
         for exp in self.explosions:

@@ -20,8 +20,6 @@ class Enemy:
 
         self.active = True
 
-
-
     def update(self):
 
         self.y += 0.5  # 下方向に移動
@@ -38,6 +36,8 @@ class Enemy:
             Common.explode_manager.SpawnExplode_Rect(self.x + 4, self.y + 4, 20)
         else:
             self.flash = 6  # 点滅処理
+            Common.explode_manager.SpawnExplode_DotRefrect(self.x + 4, self.y + 8, 5)
+
             pyxel.play(0, 2)  # 効果音再生
 
 
