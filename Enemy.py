@@ -45,7 +45,7 @@ class Enemy:
             Common.explode_manager.spawn_explosion(self.x, self.y)
         else:
             self.flash = 6  # 点滅処理
-            pyxel.play(0, 1)  # 効果音再生
+            pyxel.play(0, 2)  # 効果音再生
 
 
     def draw(self):

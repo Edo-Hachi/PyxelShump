@@ -1,6 +1,8 @@
 from collections import namedtuple
 from ExplodeManager import ExplodeManager
 
+VERSION = "0.1.0"
+
 DEBUG = True #or False
 
 #Window size

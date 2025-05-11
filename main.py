@@ -22,31 +22,12 @@ def draw_title(self):
 
     pyxel.text(40, 50, "Mini Shooter", 7)
     pyxel.text(40, 70, "Press SPACE to Start", 7)
+    pyxel.text(50, 110, "Game Ver:" + str(Common.VERSION), 7)
+    pyxel.text(50, 120, "Pyxel Ver:" + str(pyxel.VERSION), 7)
+
 # Title State ----------------------------------------
 
 # Playing State ----------------------------------------
-
-# def update_playing(self):
-#     self.star_manager.update()
-#     self.player.update()
-
-
-#     #debug code Enemy Spawn
-#     if Common.GameTimer % 100 == 0:
-#         enemy_x = random.randint(0, Common.WIN_WIDTH - 8)
-#         enemy_y = 8
-#         _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 2, 100)
-
-#         Common.enemy_list.append(_Enemy)
-
-#     #敵の更新処理
-#     for _e in Common.enemy_list:
-#             _e.update()
-
-
-#     #ガベコレ(自弾とかに当たってたら消す)
-#     Common.enemy_list = [e for e in Common.enemy_list if e.active]
-
 
 def update_playing(self):
     self.star_manager.update()
@@ -83,10 +64,13 @@ def update_playing(self):
             ):
                 enemy.on_hit(bullet)  # ヒット処理（敵のライフ減少、爆発など）
 
-    # --- ガベージコレクション（死んだ敵の除去） ---
+    # --- ガベージコレクション（死んだ敵、自弾も除去） ---
     Common.enemy_list = [e for e in Common.enemy_list if e.active]
-    Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]  # ← 弾も除去推奨
+    Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
 
+    #ばくはつだーーーーーーーーーーーーーーーーーーーー
+    Common.explode_manager.update()
+    #ばくはつだーーーーーーーーーーーーーーーーーーーー
 
 
 def draw_playing(self):
@@ -98,9 +82,12 @@ def draw_playing(self):
     for _e in Common.enemy_list:
         _e.draw()
     
+    #ばくはつだーーーーーーーーーーーーーーーーーーーー
+    Common.explode_manager.draw()
+    #ばくはつだーーーーーーーーーーーーーーーーーーーー
+
     #Draw HUD
     pyxel.text(8, 0, "Score: " + str(Common.Score), 7)
-
 
 
 # Playing State ----------------------------------------
@@ -163,7 +150,7 @@ class App:
             pyxel.quit()
 
         #ばくはつだーーーーーーーーーーーーーーーーーーーー
-        Common.explode_manager.update()
+        #Common.explode_manager.update()
         #ばくはつだーーーーーーーーーーーーーーーーーーーー
 
 
@@ -187,7 +174,7 @@ class App:
 
         #self.Explode_mgr.draw()
         #ばくはつだーーーーーーーーーーーーーーーーーーーー
-        Common.explode_manager.draw()
+        #Common.explode_manager.draw()
         #ばくはつだーーーーーーーーーーーーーーーーーーーー
 
 App()
