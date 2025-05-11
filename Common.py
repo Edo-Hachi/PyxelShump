@@ -1,7 +1,6 @@
 from collections import namedtuple
-from ExplodeManager import ExplodeManager
-from enum import Enum
-
+from ExplodeManager import ExpMan
+#from enum import Enum
 
 VERSION = "0.1.2"
 
@@ -35,7 +34,7 @@ enemy_bullet_list = []
 player_bullet_list = []
 
 #Explosion Ctrl Manager
-explode_manager = ExplodeManager()
+explode_manager = ExpMan()
 
 def check_collision(x1, y1, w1, h1, x2, y2, w2, h2):
     # 各辺の位置を計算

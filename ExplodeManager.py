@@ -168,26 +168,27 @@ class Explode_DOT:
     def is_alive(self):
         return self.life > 0
 
-class ExplodeManager:
+# class ExplodeManager:
+class ExpMan:
     def __init__(self):
         self.explosions = []
         
-        DOT = 0
-        CIRCLE = 1
-        RECT = 2
+        # DOT = 0
+        # CIRCLE = 1
+        # RECT = 2
 
     def SpawnExplode_Rect(self, x, y, cnt=20):
-        for _ in range(cnt):
+        for c in range(cnt):
             self.explosions.append(Explode_RECT(x, y))
 
     def SpawnExplode_Dot(self, x, y, cnt=20):
-        for _ in range(cnt):
-            self.explosions.append(Explode_DOT(x + 4, y + 4))
+        for c in range(cnt):
+            self.explosions.append(Explode_DOT(x, y))
 
 
     def SpawnExplode_Circle(self, x, y, cnt=20):
-        for _ in range(cnt):
-            self.explosions.append(Explde_CIRCLE(x + 4, y + 4))
+        for c in range(cnt):
+            self.explosions.append(Explde_CIRCLE(x, y))
     
 
     # def spawn_explosion(self, x, y, count = 20, exp=0):

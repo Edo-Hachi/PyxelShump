@@ -107,7 +107,7 @@ class Player:
                                         _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
 
                         #爆発エフェクト   
-                        Common.explode_manager.SpawnExplode_Circle(self.x+4, self.y + 4, 20)
+                        Common.explode_manager.SpawnExplode_Circle(self.x + 4, self.y + 4, 20)
                         #一度接触すると3秒クールタイム
                         self.ExplodeCoolTimer = EXPLODE_TIMER
                         self.NowExploding = True
@@ -123,11 +123,11 @@ class Player:
     def draw(self):
 
         if self.ExplodeCoolTimer < 0:
-            print("Ship Active")
+            #print("Ship Active")
             pyxel.blt(self.x, self.y, Common.TILE_BANK0,
                 Common.SprList[self.SprName].x, Common.SprList[self.SprName].y, self.width, self.height, pyxel.COLOR_BLACK)
         else:
-            print("Cool Time")
+            #print("Cool Time")
             if math.sin(Common.GameTimer/3) < 0:
                 for n in range(1, 15):
                     pyxel.pal(n,pyxel.COLOR_YELLOW)
