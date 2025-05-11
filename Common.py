@@ -1,7 +1,7 @@
 from collections import namedtuple
 from ExplodeManager import ExplodeManager
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 
 DEBUG = True #or False
 
