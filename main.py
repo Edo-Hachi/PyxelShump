@@ -22,8 +22,8 @@ def draw_title(self):
 
     pyxel.text(40, 50, "Mini Shooter", 7)
     pyxel.text(40, 70, "Press SPACE to Start", 7)
-    pyxel.text(50, 110, "Game Ver:" + str(Common.VERSION), 7)
-    pyxel.text(50, 120, "Pyxel Ver:" + str(pyxel.VERSION), 7)
+    pyxel.text(40, 110, "Game Ver:" + str(Common.VERSION), 7)
+    pyxel.text(40, 120, "Pyxel Ver:" + str(pyxel.VERSION), 7)
 
 # Title State ----------------------------------------
 
