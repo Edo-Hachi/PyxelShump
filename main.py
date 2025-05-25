@@ -97,6 +97,7 @@ class App:
     def __init__(self):
         pyxel.init(Common.WIN_WIDTH, Common.WIN_HEIGHT, title="Mini Shooter", fps=60)
         pyxel.load("my_resource.pyxres")
+#        pyxel.mouse(False)  # システムのマウスカーソルを非表示にする
 
         Common.GameState = Common.STATE_TITLE
         #self.GameState = Common.GameState
@@ -124,8 +125,10 @@ class App:
         Common.GameTimer += 1
 
         #ばくはつだーーーーーーーーーーーーーーーーーーーー
+        #爆発パーティクルのテストコード
         if pyxel.btn(pyxel.KEY_Z):
-            Common.explode_manager.spawn_explosion(50,50)
+            #Common.explode_manager.spawn_explosion(50,50)
+            Common.explode_manager.SpawnExplode_Circle(50,50,20)
             #self.Explode_mgr.spawn_explosion(50, 50)
             #print("Z Key Pressed")
         #ばくはつだーーーーーーーーーーーーーーーーーーーー
@@ -174,5 +177,11 @@ class App:
         #ばくはつだーーーーーーーーーーーーーーーーーーーー
         #Common.explode_manager.draw()
         #ばくはつだーーーーーーーーーーーーーーーーーーーー
+
+        # カスタムカーソルを描画
+        # cursor_x = pyxel.mouse_x
+        # cursor_y = pyxel.mouse_y
+        # cursor_color = pyxel.frame_count % 16  # カーソルの色を時間とともに変化させる
+        #pyxel.rect(cursor_x, cursor_y, 4, 4, cursor_color)  # 4x4のカラフルな四角形のカーソル
 
 App()
