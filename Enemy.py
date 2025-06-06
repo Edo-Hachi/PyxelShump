@@ -24,6 +24,10 @@ class Enemy:
 
         self.y += 0.5  # 下方向に移動
 
+        # 画面外に出たら非アクティブにする
+        if self.y > Common.WIN_HEIGHT:
+            self.active = False
+
 
     def on_hit(self, bullet):
         # 弾を消す
