@@ -21,6 +21,12 @@ STATE_PLAYING = 1
 STATE_GAMEOVER = 2
 STATE_PAUSE = 3
 
+#Camera Shake
+ShakeTimer = 0
+ShakeStrength = 10
+#FlashTimer = 0
+
+
 
 HighScore = 0
 Score = 0

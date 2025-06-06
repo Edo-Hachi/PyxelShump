@@ -10,7 +10,7 @@ class ExpType(Enum):
     CIRCLE = 2
     DOT_REFRECT = 3
 
-class Explde_CIRCLE:
+class Explode_CIRCLE:
     def __init__(self, x, y, r=10):
         self.x = x
         self.y = y
@@ -27,6 +27,9 @@ class Explde_CIRCLE:
 
         self.FirstCircle = 1
 
+        self.trail = []  # 残像履歴（最大10個とか）
+
+
     def update(self):
             self.x += self.dx
             self.y += self.dy
@@ -39,6 +42,11 @@ class Explde_CIRCLE:
             #爆発パーティクルの速度減衰
             self.dx *= 0.87
             self.dy *= 0.87
+
+            self.trail.append((self.x, self.y, self.r))  # 現在位置を追加
+            if len(self.trail) > 5 :
+                self.trail.pop(0)  # 古い残像を削除（最大10個まで）
+
 
 
     def draw(self):
@@ -73,6 +81,12 @@ class Explde_CIRCLE:
         
         if self.life > 0:
             pyxel.circ(int(self.x), int(self.y), int(self.r), _color)
+
+        for i, (tx, ty, tr) in enumerate(self.trail):
+            fade_color = pyxel.COLOR_YELLOW if i < 3 else pyxel.COLOR_ORANGE
+            if i > 6:
+                fade_color = pyxel.COLOR_BROWN
+            pyxel.circ(int(tx), int(ty), int(tr * 0.7), fade_color)
 
     @property
     def is_alive(self):
@@ -210,9 +224,9 @@ class ExpMan:
         particle_cls = {
             ExpType.RECT: Explode_RECT,
             ExpType.DOT: Explode_DOT,
-            ExpType.CIRCLE: Explde_CIRCLE,
+            ExpType.CIRCLE: Explode_CIRCLE,
             ExpType.DOT_REFRECT: Explode_DOT_REFRECT,
-        }.get(exp_type, Explde_CIRCLE)
+        }.get(exp_type, Explode_CIRCLE)
 
         for _ in range(cnt):
             self.explosions.append(particle_cls(x, y))

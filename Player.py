@@ -118,6 +118,8 @@ class Player:
                         self.ExplodeCoolTimer = EXPLODE_TIMER
                         self.NowExploding = True
 
+                        Common.ShakeTimer = 10
+
                     #Common.GameState = Common.STATE_GAMEOVER
         else:
             self.NowExploding = False

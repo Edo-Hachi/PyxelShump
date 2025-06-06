@@ -38,7 +38,8 @@ class Enemy:
             self.active = False  # エネミーを非アクティブに
             Common.Score += self.Score  # スコア加算
             pyxel.play(0, 1)  # 効果音再生
-            Common.explode_manager.spawn_explosion(self.x + 4, self.y + 4, 20, ExpType.RECT)
+            #Common.explode_manager.spawn_explosion(self.x + 4, self.y + 4, 20, ExpType.RECT)
+            Common.explode_manager.spawn_explosion(self.x + 4, self.y + 4, 20, ExpType.CIRCLE)
         else:
             self.flash = 6  # 点滅処理
             Common.explode_manager.spawn_explosion(self.x + 4, self.y + 8, 5, ExpType.DOT_REFRECT)

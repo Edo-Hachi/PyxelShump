@@ -73,9 +73,24 @@ def update_playing(self):
 
 
 def draw_playing(self):
-    pyxel.cls(pyxel.COLOR_NAVY)
 
+    if Common.ShakeTimer == 10:
+        pyxel.cls(pyxel.COLOR_WHITE)
+    else:
+        pyxel.cls(pyxel.COLOR_NAVY)
+
+    if Common.ShakeTimer > 0:
+        # カメラシェイクの実装
+        shake_offset_x = random.randint(-Common.ShakeStrength, Common.ShakeStrength)
+        shake_offset_y = random.randint(-Common.ShakeStrength, Common.ShakeStrength)
+        pyxel.camera(shake_offset_x, shake_offset_y)
+
+        Common.ShakeTimer -= 1
+    else:
+        pyxel.camera(0, 0)  
+    
     self.star_manager.draw()
+
     self.player.draw()
 
     for _e in Common.enemy_list:
