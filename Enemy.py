@@ -1,5 +1,6 @@
 import pyxel
 import Common
+from ExplodeManager import ExpType
 
 class Enemy:
     def __init__(self, x, y, w=8, h=8, life = 1, score=10):
@@ -41,10 +42,10 @@ class Enemy:
             self.active = False  # エネミーを非アクティブに
             Common.Score += self.Score  # スコア加算
             pyxel.play(0, 1)  # 効果音再生
-            Common.explode_manager.SpawnExplode_Rect(self.x + 4, self.y + 4, 20)
+            Common.explode_manager.spawn_explosion(self.x + 4, self.y + 4, 20, ExpType.RECT)
         else:
             self.flash = 6  # 点滅処理
-            Common.explode_manager.SpawnExplode_DotRefrect(self.x + 4, self.y + 8, 5)
+            Common.explode_manager.spawn_explosion(self.x + 4, self.y + 8, 5, ExpType.DOT_REFRECT)
 
             pyxel.play(0, 2)  # 効果音再生
 

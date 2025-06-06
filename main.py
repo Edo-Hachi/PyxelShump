@@ -3,6 +3,7 @@ import random
 
 import Common
 from Enemy import Enemy
+from ExplodeManager import ExpType
 
 from StarManager import StarManager
 from Player import Player
@@ -127,8 +128,7 @@ class App:
         #ばくはつだーーーーーーーーーーーーーーーーーーーー
         #爆発パーティクルのテストコード
         if pyxel.btn(pyxel.KEY_Z):
-            #Common.explode_manager.spawn_explosion(50,50)
-            Common.explode_manager.SpawnExplode_Circle(50,50,20)
+            Common.explode_manager.spawn_explosion(50, 50, 20, ExpType.CIRCLE)
             #self.Explode_mgr.spawn_explosion(50, 50)
             #print("Z Key Pressed")
         #ばくはつだーーーーーーーーーーーーーーーーーーーー

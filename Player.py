@@ -1,6 +1,7 @@
 import pyxel
 import Common
 import math
+from ExplodeManager import ExpType
 
 from Bullet import Bullet
 
@@ -111,7 +112,7 @@ class Player:
                                         _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
 
                         #爆発エフェクト   
-                        Common.explode_manager.SpawnExplode_Circle(self.x + 4, self.y + 4, 20)
+                        Common.explode_manager.spawn_explosion(self.x + 4, self.y + 4, 20, ExpType.CIRCLE)
 
                         #一度接触すると3秒クールタイム
                         self.ExplodeCoolTimer = EXPLODE_TIMER
