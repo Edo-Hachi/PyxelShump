@@ -2,7 +2,7 @@ import pyxel
 import Common
 
 class Enemy:
-    def __init__(self, x, y, w=8, h=    8, life = 1, score=10):
+    def __init__(self, x, y, w=8, h=8, life = 1, score=10):
         self.x = x
         self.y = y
         self.w = w  # Sprite Width
@@ -24,8 +24,12 @@ class Enemy:
 
         self.y += 0.5  # 下方向に移動
 
+#<<<<<<< Updated upstream
         # 画面外に出たら非アクティブにする
-        if self.y > Common.WIN_HEIGHT:
+       # if self.y > Common.WIN_HEIGHT:
+#=======
+      # 画面外に出たら非アクティブにする
+        if self.y > Common.WIN_HEIGHT + 16:
             self.active = False
 
 
@@ -54,7 +58,8 @@ class Enemy:
         self.flash -= 1
 
         pyxel.blt(self.x, self.y, Common.TILE_BANK0, 
-                  Common.SprList["ENEMY01_0"].x, Common.SprList["ENEMY01_0"].y,
+                  #Common.SprList["ENEMY01_0"].x, Common.SprList["ENEMY01_0"].y,
+                  Common.SprList["ENEMY05_0"].x, Common.SprList["ENEMY05_0"].y,
                   self.w, self.h, pyxel.COLOR_BLACK)
 
         pyxel.pal()

@@ -69,9 +69,18 @@ class Player:
             dy += 1 
 
         # Normalize(斜め移動ならスピード調整（0.6倍）)
+        # if dx != 0 and dy != 0:
+        #     dx *= 0.6
+        #     dy *= 0.6
+
+
+        # 斜め移動時の速度を正規化（1/√2 ≈ 0.707を掛けて対角線上の速度を調整）
         if dx != 0 and dy != 0:
-            dx *= 0.6
-            dy *= 0.6
+            DIAGONAL_NORMALIZE = 0.707  # 1/√2 の近似値
+            #DIAGONAL_NORMALIZE = 0.6  # 1/√2 の近似値
+            dx *= DIAGONAL_NORMALIZE
+            dy *= DIAGONAL_NORMALIZE
+
 
         self.x += dx * self.speed
         self.y += dy * self.speed
