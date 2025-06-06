@@ -1,7 +1,14 @@
 import pyxel
 import random
-#from dataclasses import dataclass
-#from Common import ExpType
+from enum import Enum
+
+
+class ExpType(Enum):
+    """Explosion particle type."""
+    RECT = 0
+    DOT = 1
+    CIRCLE = 2
+    DOT_REFRECT = 3
 
 class Explde_CIRCLE:
     def __init__(self, x, y, r=10):
@@ -198,21 +205,17 @@ class ExpMan:
     def __init__(self):
         self.explosions = []
 
-    def SpawnExplode_Rect(self, x, y, cnt = 20):
-        for c in range(cnt):
-            self.explosions.append(Explode_RECT(x, y))
+    def spawn_explosion(self, x, y, cnt=20, exp_type=ExpType.CIRCLE):
+        """Spawn explosion particles of specified type."""
+        particle_cls = {
+            ExpType.RECT: Explode_RECT,
+            ExpType.DOT: Explode_DOT,
+            ExpType.CIRCLE: Explde_CIRCLE,
+            ExpType.DOT_REFRECT: Explode_DOT_REFRECT,
+        }.get(exp_type, Explde_CIRCLE)
 
-    def SpawnExplode_Dot(self, x, y, cnt = 20):
-        for c in range(cnt):
-            self.explosions.append(Explode_DOT(x, y))
-
-    def SpawnExplode_Circle(self, x, y, cnt =20):
-        for c in range(cnt):
-            self.explosions.append(Explde_CIRCLE(x, y))
-    
-    def SpawnExplode_DotRefrect(self, x, y, cnt = 5):
-        for c in range(cnt):
-            self.explosions.append(Explode_DOT_REFRECT(x, y))
+        for _ in range(cnt):
+            self.explosions.append(particle_cls(x, y))
 
     def update(self):
         for exp in self.explosions:
