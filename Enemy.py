@@ -25,10 +25,6 @@ class Enemy:
 
         self.y += 0.5  # 下方向に移動
 
-#<<<<<<< Updated upstream
-        # 画面外に出たら非アクティブにする
-       # if self.y > Common.WIN_HEIGHT:
-#=======
       # 画面外に出たら非アクティブにする
         if self.y > Common.WIN_HEIGHT + 16:
             self.active = False
