@@ -234,8 +234,8 @@ class ExpMan:
 
     def update(self):
         
-        #if Common.StopTimer > 0:
-        #    return
+        if Common.StopTimer > 0:
+            return
           
         for exp in self.explosions:
             exp.update()

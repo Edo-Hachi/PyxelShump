@@ -29,9 +29,10 @@ def draw_title(self):
 # Playing State ----------------------------------------
 
 def update_playing(self):
-    
+
     Common.explode_manager.update()
 
+    
     if Common.StopTimer > 0:
         Common.StopTimer -= 1
         return  
@@ -40,11 +41,25 @@ def update_playing(self):
     self.player.update()
 
     # --- デバッグ用敵スポーン ---
-    if Common.GameTimer % 50 == 0:
-        enemy_x = random.randint(0, Common.WIN_WIDTH - 8)
-        enemy_y = 8
-        _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100)
-        Common.enemy_list.append(_Enemy)
+    # if Common.GameTimer % 50 == 0:
+    #     enemy_x = random.randint(0, Common.WIN_WIDTH - 8)
+    #     enemy_y = 8
+    #     _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100)
+    #     Common.enemy_list.append(_Enemy)
+
+    if Common.GameStateSub == Common.STATE_PLAYING_ENEMY_SPAWN:
+        BASEX = 11
+        OFSX = 10
+        
+        for _x in range(10):
+            enemy_x = OFSX + (BASEX * _x)
+            enemy_y = 16
+            _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100)
+            Common.enemy_list.append(_Enemy)
+        
+        Common.GameStateSub = Common.STATE_PLAYING_FIGHT
+            
+        
 
     # --- 敵の移動処理だけを行う（衝突判定は外す） ---
     for _e in Common.enemy_list:
@@ -105,7 +120,7 @@ def draw_playing(self):
     for _e in Common.enemy_list:
         _e.draw()
     
-    #ばくはつだーーーーーーーーーーーーーーーーーーーー
+    #爆発描画ーーーーーーーーーーーーーーーーーーーー
     Common.explode_manager.draw()
     #ばくはつだーーーーーーーーーーーーーーーーーーーー
 

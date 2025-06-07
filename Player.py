@@ -147,6 +147,9 @@ class Player:
         pyxel.blt(self.x, self.y, Common.TILE_BANK0,
                 Common.SprList[self.SprName].x, Common.SprList[self.SprName].y, self.width, self.height, pyxel.COLOR_BLACK)
 
+        #デフォルトパレットに戻す
+        pyxel.pal()
+        
         #Exhaust
         pyxel.blt(self.x, self.y+8, Common.TILE_BANK0,
             Common.SprList[self.ExtSpr].x, Common.SprList[self.ExtSpr].y, self.width, self.height, pyxel.COLOR_BLACK)

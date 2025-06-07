@@ -21,19 +21,31 @@ STATE_PLAYING = 1
 STATE_GAMEOVER = 2
 STATE_PAUSE = 3
 
+GameState = STATE_TITLE
+
+STATE_PLAYING_ENEMY_SPAWN = 0
+STATE_PLAYING_FIGHT = 1
+GameStateSub = STATE_PLAYING_ENEMY_SPAWN
+
 #Camera Shake
 ShakeTimer = 0
 ShakeStrength = 10
 StopTimer = 0
 
+#Stop Effect
 STOP_TIME = 20  # Stop Time
 SHAKE_TIME = 10  # Camera Shake Time
 
+#Game System Timer
+GameTimer = 0
+
+
+#Score
 HighScore = 0
 Score = 0
-GameState = STATE_TITLE
 
-GameTimer = 0
+
+
 
 #Sprite Collision List
 enemy_list = []
