@@ -30,8 +30,8 @@ def draw_title(self):
 
 def update_playing(self):
 
+    #爆発エフェクトはヒットストップに含めない
     Common.explode_manager.update()
-
     
     if Common.StopTimer > 0:
         Common.StopTimer -= 1
@@ -40,13 +40,13 @@ def update_playing(self):
     self.star_manager.update()
     self.player.update()
 
-
+    #ゲームスタート時の敵スポーン処理
     if Common.GameStateSub == Common.STATE_PLAYING_ENEMY_SPAWN:
         BASEX = 11
         OFSX = 10
 
         BASEY = 11
-        OFSY = 8
+        OFSY = 10
 
         # --- 敵のスポーン処理 ---
         for _y in range(4):
@@ -54,13 +54,12 @@ def update_playing(self):
             for _x in range(10):
                 enemy_x = OFSX + (BASEX * _x)
                 #enemy_y = 16
-                sprite_num = random.randint(1, Common.MAX_ENEMY_NUM)
+                #sprite_num = random.randint(1, Common.MAX_ENEMY_NUM)
+                sprite_num = Common.ENEMY_MAP_STG01[_y][_x]
                 _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100, sprite_num)
                 Common.enemy_list.append(_Enemy)
         
         Common.GameStateSub = Common.STATE_PLAYING_FIGHT
-
-
 
     # --- 敵の移動処理だけを行う（衝突判定は外す） ---
     for _e in Common.enemy_list:
@@ -90,13 +89,12 @@ def update_playing(self):
     Common.enemy_list = [e for e in Common.enemy_list if e.active]
     Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
 
-    #ばくはつだーーーーーーーーーーーーーーーーーーーー
-    #Common.explode_manager.update()
-    #ばくはつだーーーーーーーーーーーーーーーーーーーー
-
 
 def draw_playing(self):
 
+    #爆発描画ーーーーーーーーーーーーーーーーーーーー
+    #Common.explode_manager.draw()
+    #ばくはつだーーーーーーーーーーーーーーーーーーーー
 
     if Common.ShakeTimer == 10:
         pyxel.cls(pyxel.COLOR_WHITE)
@@ -129,17 +127,10 @@ def draw_playing(self):
     pyxel.camera(0, 0)      
     pyxel.text(8, 0, "Score: " + str(Common.Score), 7)
 
-
-# Playing State ----------------------------------------
-
-
-
-
 class App:
     def __init__(self):
         pyxel.init(Common.WIN_WIDTH, Common.WIN_HEIGHT, title="Mini Shooter", fps=60)
         pyxel.load("my_resource.pyxres")
-#        pyxel.mouse(False)  # システムのマウスカーソルを非表示にする
 
         Common.GameState = Common.STATE_TITLE
         #self.GameState = Common.GameState
@@ -148,7 +139,7 @@ class App:
         self.star_manager = StarManager(count=100)        
 
         #Player Star Ship
-        self.player = Player(64, 64)
+        self.player = Player(64-4, 108)
 
         Common.Score = 10
         Common.HighScore = 100

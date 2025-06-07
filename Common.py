@@ -47,6 +47,19 @@ Score = 0
 
 
 
+# --------------------------------------------------
+# Enemy spawn pattern (10x4 grid)
+# --------------------------------------------------
+ENEMY_MAP_STG01 = [
+    [5, 3, 5, 5, 4, 4, 5, 5, 3, 5],
+    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+    [1, 4, 4, 3, 3, 3, 3, 4, 4, 1],
+    [1, 1, 1, 2, 2, 2, 2, 1, 1, 1],
+]
+
+
+
+
 #Sprite Collision List
 enemy_list = []
 enemy_bullet_list = []
@@ -131,7 +144,6 @@ SprList = {
     "ENEMY05_2" : SpIdx(152, 8),   #Enemy05_2
     "ENEMY05_3" : SpIdx(160, 8),   #Enemy05_3
 
-
 }
 
 # --------------------------------------------------
@@ -139,7 +151,6 @@ SprList = {
 # --------------------------------------------------
 MAX_ENEMY_NUM = 5
 MAX_ANIM_PAT = 4
-
 
 def get_enemy_sprite(enemy_num: int, anim_pat: int) -> SpIdx:
     """Return ``SpIdx`` for given enemy number and animation pattern."""
