@@ -133,3 +133,19 @@ SprList = {
 
 
 }
+
+# --------------------------------------------------
+# Enemy sprite helper
+# --------------------------------------------------
+MAX_ENEMY_NUM = 5
+MAX_ANIM_PAT = 4
+
+
+def get_enemy_sprite(enemy_num: int, anim_pat: int) -> SpIdx:
+    """Return ``SpIdx`` for given enemy number and animation pattern."""
+
+    enemy_num = max(1, min(enemy_num, MAX_ENEMY_NUM))
+    anim_pat = anim_pat % MAX_ANIM_PAT
+
+    key = f"ENEMY{enemy_num:02d}_{anim_pat}"
+    return SprList.get(key, SprList["NULL"])

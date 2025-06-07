@@ -5,7 +5,7 @@ from ExplodeManager import ExpType
 ANIM_FRAME = 10
 
 class Enemy:
-    def __init__(self, x, y, w=8, h=8, life = 1, score=10):
+    def __init__(self, x, y, w=8, h=8, life=1, score=10, sprite_num=1):
         self.x = x
         self.y = y
         self.w = w  # Sprite Width
@@ -20,6 +20,9 @@ class Enemy:
         self.Score = score
 
         self.flash = 0
+
+        # Enemy sprite id (1-5)
+        self.sprite_num = sprite_num
 
         self.active = True
 
@@ -58,13 +61,19 @@ class Enemy:
         ANIM_FRAME = 10
         anim_pat = pyxel.frame_count // ANIM_FRAME % 4  # 0～3でぐるぐる（アニメ切り替え）
 
-        sprite_key = f"ENEMY01_{anim_pat}"  # → "ENEMY01_0"～"ENEMY01_3"
-        
-        pyxel.blt(self.x, self.y, Common.TILE_BANK0, 
-                  Common.SprList[sprite_key].x, Common.SprList[sprite_key].y,
-                  #Common.SprList["ENEMY01_0"].x, Common.SprList["ENEMY01_0"].y,
-                  #Common.SprList["ENEMY05_0"].x, Common.SprList["ENEMY05_0"].y,
-                  self.w, self.h, pyxel.COLOR_BLACK)
+        # get sprite coordinates from Common by enemy number
+        sprite_idx = Common.get_enemy_sprite(self.sprite_num, anim_pat)
+
+        pyxel.blt(
+            self.x,
+            self.y,
+            Common.TILE_BANK0,
+            sprite_idx.x,
+            sprite_idx.y,
+            self.w,
+            self.h,
+            pyxel.COLOR_BLACK,
+        )
 
         pyxel.pal()
 

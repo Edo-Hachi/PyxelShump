@@ -40,31 +40,27 @@ def update_playing(self):
     self.star_manager.update()
     self.player.update()
 
-    # --- デバッグ用敵スポーン ---
-    # if Common.GameTimer % 50 == 0:
-    #     enemy_x = random.randint(0, Common.WIN_WIDTH - 8)
-    #     enemy_y = 8
-    #     _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100)
-    #     Common.enemy_list.append(_Enemy)
 
     if Common.GameStateSub == Common.STATE_PLAYING_ENEMY_SPAWN:
         BASEX = 11
         OFSX = 10
-        
-        BASEY=10
-        OFXY = 10
 
+        BASEY = 11
+        OFSY = 8
+
+        # --- 敵のスポーン処理 ---
         for _y in range(4):
-            enemy_y = OFXY + (BASEY * _y)
+            enemy_y = OFSY + (BASEY * _y)
             for _x in range(10):
                 enemy_x = OFSX + (BASEX * _x)
                 #enemy_y = 16
-                _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100)
+                sprite_num = random.randint(1, Common.MAX_ENEMY_NUM)
+                _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100, sprite_num)
                 Common.enemy_list.append(_Enemy)
         
         Common.GameStateSub = Common.STATE_PLAYING_FIGHT
-            
-        
+
+
 
     # --- 敵の移動処理だけを行う（衝突判定は外す） ---
     for _e in Common.enemy_list:
