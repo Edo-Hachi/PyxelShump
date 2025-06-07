@@ -22,6 +22,10 @@ class Enemy:
         self.active = True
 
     def update(self):
+        
+        if Common.StopTimer > 0:
+            return  
+        
 
         self.y += 0.5  # 下方向に移動
 

@@ -29,6 +29,11 @@ def draw_title(self):
 # Playing State ----------------------------------------
 
 def update_playing(self):
+    
+    if Common.StopTimer > 0:
+        Common.StopTimer -= 1
+        return  
+
     self.star_manager.update()
     self.player.update()
 
@@ -74,10 +79,12 @@ def update_playing(self):
 
 def draw_playing(self):
 
+
     if Common.ShakeTimer == 10:
         pyxel.cls(pyxel.COLOR_WHITE)
     else:
         pyxel.cls(pyxel.COLOR_NAVY)
+
 
     if Common.ShakeTimer > 0:
         # カメラシェイクの実装
@@ -88,7 +95,7 @@ def draw_playing(self):
         Common.ShakeTimer -= 1
     else:
         pyxel.camera(0, 0)  
-    
+
     self.star_manager.draw()
 
     self.player.draw()
@@ -101,6 +108,7 @@ def draw_playing(self):
     #ばくはつだーーーーーーーーーーーーーーーーーーーー
 
     #Draw HUD
+    #pyxel.camera(0, 0)      
     pyxel.text(8, 0, "Score: " + str(Common.Score), 7)
 
 

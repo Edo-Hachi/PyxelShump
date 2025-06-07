@@ -1,6 +1,7 @@
 import pyxel
 import random
 from enum import Enum
+import Common
 
 
 class ExpType(Enum):
@@ -232,6 +233,10 @@ class ExpMan:
             self.explosions.append(particle_cls(x, y))
 
     def update(self):
+        
+        if Common.StopTimer > 0:
+            return
+          
         for exp in self.explosions:
             exp.update()
         self.explosions = [exp for exp in self.explosions if exp.is_alive]

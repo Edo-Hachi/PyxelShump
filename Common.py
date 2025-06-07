@@ -24,7 +24,7 @@ STATE_PAUSE = 3
 #Camera Shake
 ShakeTimer = 0
 ShakeStrength = 10
-#FlashTimer = 0
+StopTimer = 0
 
 
 

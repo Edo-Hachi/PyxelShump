@@ -44,6 +44,10 @@ class Player:
 
 
     def update(self):
+        
+        if Common.StopTimer > 0:
+            return  
+        
         #Exhaust Animation --------
         self.ExtSpr = ExtNames[self.ExtIndex]
         
@@ -119,6 +123,8 @@ class Player:
                         self.NowExploding = True
 
                         Common.ShakeTimer = 10
+                        Common.StopTimer = 15
+                        
 
                     #Common.GameState = Common.STATE_GAMEOVER
         else:
