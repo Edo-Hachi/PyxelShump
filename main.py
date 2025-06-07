@@ -51,11 +51,16 @@ def update_playing(self):
         BASEX = 11
         OFSX = 10
         
-        for _x in range(10):
-            enemy_x = OFSX + (BASEX * _x)
-            enemy_y = 16
-            _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100)
-            Common.enemy_list.append(_Enemy)
+        BASEY=10
+        OFXY = 10
+
+        for _y in range(4):
+            enemy_y = OFXY + (BASEY * _y)
+            for _x in range(10):
+                enemy_x = OFSX + (BASEX * _x)
+                #enemy_y = 16
+                _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100)
+                Common.enemy_list.append(_Enemy)
         
         Common.GameStateSub = Common.STATE_PLAYING_FIGHT
             
