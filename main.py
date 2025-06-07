@@ -30,6 +30,8 @@ def draw_title(self):
 
 def update_playing(self):
     
+    Common.explode_manager.update()
+
     if Common.StopTimer > 0:
         Common.StopTimer -= 1
         return  
@@ -73,7 +75,7 @@ def update_playing(self):
     Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
 
     #ばくはつだーーーーーーーーーーーーーーーーーーーー
-    Common.explode_manager.update()
+    #Common.explode_manager.update()
     #ばくはつだーーーーーーーーーーーーーーーーーーーー
 
 
@@ -108,7 +110,7 @@ def draw_playing(self):
     #ばくはつだーーーーーーーーーーーーーーーーーーーー
 
     #Draw HUD
-    #pyxel.camera(0, 0)      
+    pyxel.camera(0, 0)      
     pyxel.text(8, 0, "Score: " + str(Common.Score), 7)
 
 

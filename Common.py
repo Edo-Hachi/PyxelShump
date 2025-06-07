@@ -26,7 +26,8 @@ ShakeTimer = 0
 ShakeStrength = 10
 StopTimer = 0
 
-
+STOP_TIME = 20  # Stop Time
+SHAKE_TIME = 10  # Camera Shake Time
 
 HighScore = 0
 Score = 0
