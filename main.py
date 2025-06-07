@@ -54,7 +54,8 @@ def update_playing(self):
         for _x in range(10):
             enemy_x = OFSX + (BASEX * _x)
             enemy_y = 16
-            _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100)
+            sprite_num = random.randint(1, Common.MAX_ENEMY_NUM)
+            _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100, sprite_num)
             Common.enemy_list.append(_Enemy)
         
         Common.GameStateSub = Common.STATE_PLAYING_FIGHT
