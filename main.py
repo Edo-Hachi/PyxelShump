@@ -144,13 +144,6 @@ class App:
         Common.Score = 10
         Common.HighScore = 100
 
-        #爆発パーティクル(Test)
-        #self.Explode_mgr = ExplodeManager()
-
-        
-
-        #self.collision_flg = False
-
         pyxel.run(self.update, self.draw)
         
 
@@ -159,8 +152,8 @@ class App:
 
         #ばくはつだーーーーーーーーーーーーーーーーーーーー
         #爆発パーティクルのテストコード
-        if pyxel.btn(pyxel.KEY_Z):
-            Common.explode_manager.spawn_explosion(50, 50, 20, ExpType.CIRCLE)
+        # if pyxel.btn(pyxel.KEY_Z):
+        #     Common.explode_manager.spawn_explosion(50, 50, 20, ExpType.CIRCLE)
             #self.Explode_mgr.spawn_explosion(50, 50)
             #print("Z Key Pressed")
         #ばくはつだーーーーーーーーーーーーーーーーーーーー

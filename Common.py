@@ -1,6 +1,6 @@
 from collections import namedtuple
 from ExplodeManager import ExpMan
-from enum import Enum
+#from enum import Enum
 
 VERSION = "0.1.2"
 

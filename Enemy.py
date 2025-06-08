@@ -58,8 +58,8 @@ class Enemy:
         self.flash -= 1
 
         #anim_pat = 0 ~ 3
-        ANIM_FRAME = 10
-        anim_pat = pyxel.frame_count // ANIM_FRAME % 4  # 0～3でぐるぐる（アニメ切り替え）
+        AnimFrame = 10  #アニメーションの速度を変更できるよ
+        anim_pat = pyxel.frame_count // AnimFrame % 4  # 0～3でぐるぐる（アニメ切り替え）
 
         # get sprite coordinates from Common by enemy number
         sprite_idx = Common.get_enemy_sprite(self.sprite_num, anim_pat)

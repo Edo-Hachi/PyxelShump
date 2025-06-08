@@ -14,7 +14,7 @@ class Bullet:
         self.col_y = 2
         self.col_w = 4
         self.col_h = 4
-        self.active = True
+        #self.active = True
 
         self.speed = speed
 
