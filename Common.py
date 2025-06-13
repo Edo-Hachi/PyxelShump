@@ -27,6 +27,10 @@ STATE_PLAYING_ENEMY_SPAWN = 0
 STATE_PLAYING_FIGHT = 1
 GameStateSub = STATE_PLAYING_ENEMY_SPAWN
 
+# ステージ管理
+CURRENT_STAGE = 1
+MAX_STAGE = 2
+
 #Camera Shake
 ShakeTimer = 0
 ShakeStrength = 10
@@ -58,6 +62,12 @@ ENEMY_MAP_STG01 = [
 ]
 
 
+ENEMY_MAP_STG02 = [
+    [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+    [4, 4, 5, 5, 4, 4, 5, 5, 4, 4],
+    [2, 2, 1, 1, 2, 2, 1, 1, 2, 2],
+    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+]
 
 
 #Sprite Collision List
@@ -160,3 +170,22 @@ def get_enemy_sprite(enemy_num: int, anim_pat: int) -> SpIdx:
 
     key = f"ENEMY{enemy_num:02d}_{anim_pat}"
     return SprList.get(key, SprList["NULL"])
+
+def get_current_stage_map():
+    """現在のステージの敵配置マップを返す"""
+    if CURRENT_STAGE == 1:
+        return ENEMY_MAP_STG01
+    elif CURRENT_STAGE == 2:
+        return ENEMY_MAP_STG02
+    return ENEMY_MAP_STG01  # デフォルトはステージ1
+
+def check_stage_clear():
+    """敵が全滅したかチェックし、次のステージに移行する"""
+    global CURRENT_STAGE, GameStateSub
+    
+    if not enemy_list:  # 敵リストが空の場合
+        if CURRENT_STAGE < MAX_STAGE:
+            CURRENT_STAGE += 1
+            GameStateSub = STATE_PLAYING_ENEMY_SPAWN
+            return True
+    return False

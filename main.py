@@ -55,7 +55,7 @@ def update_playing(self):
                 enemy_x = OFSX + (BASEX * _x)
                 #enemy_y = 16
                 #sprite_num = random.randint(1, Common.MAX_ENEMY_NUM)
-                sprite_num = Common.ENEMY_MAP_STG01[_y][_x]
+                sprite_num = Common.ENEMY_MAP_STG02[_y][_x]
                 _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100, sprite_num)
                 Common.enemy_list.append(_Enemy)
         
@@ -88,6 +88,8 @@ def update_playing(self):
     # --- ガベージコレクション（死んだ敵、自弾も除去） ---
     Common.enemy_list = [e for e in Common.enemy_list if e.active]
     Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
+
+    Common.check_stage_clear()
 
 
 def draw_playing(self):
