@@ -29,7 +29,6 @@ def draw_title(self):
 # Playing State ----------------------------------------
 
 def update_playing(self):
-
     #爆発エフェクトはヒットストップに含めない
     Common.explode_manager.update()
     
@@ -53,21 +52,26 @@ def update_playing(self):
             enemy_y = OFSY + (BASEY * _y)
             for _x in range(10):
                 enemy_x = OFSX + (BASEX * _x)
-                #enemy_y = 16
-                #sprite_num = random.randint(1, Common.MAX_ENEMY_NUM)
-                sprite_num = Common.ENEMY_MAP_STG02[_y][_x]
-                _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 4, 100, sprite_num)
+                sprite_num = Common.get_current_stage_map()[_y][_x]
+                _Enemy = Enemy(enemy_x, enemy_y, 8, 8, 2, 100, sprite_num)
                 Common.enemy_list.append(_Enemy)
         
         Common.GameStateSub = Common.STATE_PLAYING_FIGHT
 
-    # --- 敵の移動処理だけを行う（衝突判定は外す） ---
-    for _e in Common.enemy_list:
-        _e.update()
-
     # --- 弾の移動処理（プレイヤーの弾） ---
     for _b in Common.player_bullet_list:
         _b.update()
+
+    # ステージクリア時の処理
+    if Common.GameStateSub == Common.STATE_PLAYING_STAGE_CLEAR:
+        if pyxel.btn(pyxel.KEY_SPACE):
+            Common.CURRENT_STAGE += 1
+            Common.GameStateSub = Common.STATE_PLAYING_ENEMY_SPAWN
+        return
+
+    # --- 敵の移動処理だけを行う（衝突判定は外す） ---
+    for _e in Common.enemy_list:
+        _e.update()
 
     # --- 衝突判定：プレイヤー弾 vs 敵 ---
     for bullet in Common.player_bullet_list:
@@ -91,9 +95,7 @@ def update_playing(self):
 
     Common.check_stage_clear()
 
-
 def draw_playing(self):
-
     #爆発描画ーーーーーーーーーーーーーーーーーーーー
     #Common.explode_manager.draw()
     #ばくはつだーーーーーーーーーーーーーーーーーーーー
@@ -103,13 +105,11 @@ def draw_playing(self):
     else:
         pyxel.cls(pyxel.COLOR_NAVY)
 
-
     if Common.ShakeTimer > 0:
         # カメラシェイクの実装
         shake_offset_x = random.randint(-Common.ShakeStrength, Common.ShakeStrength)
         shake_offset_y = random.randint(-Common.ShakeStrength, Common.ShakeStrength)
         pyxel.camera(shake_offset_x, shake_offset_y)
-
         Common.ShakeTimer -= 1
     else:
         pyxel.camera(0, 0)  
@@ -128,6 +128,11 @@ def draw_playing(self):
     #Draw HUD
     pyxel.camera(0, 0)      
     pyxel.text(8, 0, "Score: " + str(Common.Score), 7)
+
+    # ステージクリア表示
+    if Common.GameStateSub == Common.STATE_PLAYING_STAGE_CLEAR:
+        pyxel.text(40, 50, "Stage Clear!", 7)
+        pyxel.text(30, 70, "Press SPACE to continue", 7)
 
 class App:
     def __init__(self):

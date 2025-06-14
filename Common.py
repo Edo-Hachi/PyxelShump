@@ -25,11 +25,12 @@ GameState = STATE_TITLE
 
 STATE_PLAYING_ENEMY_SPAWN = 0
 STATE_PLAYING_FIGHT = 1
+STATE_PLAYING_STAGE_CLEAR = 2
 GameStateSub = STATE_PLAYING_ENEMY_SPAWN
 
 # ステージ管理
 CURRENT_STAGE = 1
-MAX_STAGE = 2
+MAX_STAGE = 4
 
 #Camera Shake
 ShakeTimer = 0
@@ -69,6 +70,19 @@ ENEMY_MAP_STG02 = [
     [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
 ]
 
+ENEMY_MAP_STG03 = [
+    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+    [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+]
+
+ENEMY_MAP_STG04 = [
+    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+    [5, 3, 5, 3, 5, 5, 3, 5, 3, 5],
+    [2, 1, 2, 1, 2, 2, 1, 2, 1, 2],
+    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+]
 
 #Sprite Collision List
 enemy_list = []
@@ -177,6 +191,10 @@ def get_current_stage_map():
         return ENEMY_MAP_STG01
     elif CURRENT_STAGE == 2:
         return ENEMY_MAP_STG02
+    elif CURRENT_STAGE == 3:
+        return ENEMY_MAP_STG03
+    elif CURRENT_STAGE == 4:
+        return ENEMY_MAP_STG04
     return ENEMY_MAP_STG01  # デフォルトはステージ1
 
 def check_stage_clear():
@@ -185,7 +203,6 @@ def check_stage_clear():
     
     if not enemy_list:  # 敵リストが空の場合
         if CURRENT_STAGE < MAX_STAGE:
-            CURRENT_STAGE += 1
-            GameStateSub = STATE_PLAYING_ENEMY_SPAWN
+            GameStateSub = STATE_PLAYING_STAGE_CLEAR
             return True
     return False
