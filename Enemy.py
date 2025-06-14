@@ -26,10 +26,15 @@ class Enemy:
 
         self.active = True
 
+        # Movement parameters are handled globally
+
     def update(self):
-        
+
         if Common.StopTimer > 0:
-            return  
+            return
+
+        # Individual enemies no longer handle movement here.
+        # Movement is controlled at the formation level.
 
     def on_hit(self, bullet):
         # 弾を消す

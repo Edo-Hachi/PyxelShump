@@ -51,6 +51,14 @@ GameTimer = 0
 HighScore = 0
 Score = 0
 
+# --------------------------------------------------
+# Enemy movement parameters
+# --------------------------------------------------
+# Horizontal speed of the enemy group
+ENEMY_MOVE_SPEED = 0.5
+# Current horizontal direction: 1 for right, -1 for left
+ENEMY_MOVE_DIR = 1
+
 
 
 
