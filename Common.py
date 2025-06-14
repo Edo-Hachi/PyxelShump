@@ -2,7 +2,9 @@ from collections import namedtuple
 from ExplodeManager import ExpMan
 #from enum import Enum
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"
+LAUNCH_DATE = "2025/06/14"
+
 
 DEBUG = False #or False
 

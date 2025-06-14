@@ -19,8 +19,8 @@ def draw_title(self):
     pyxel.cls(pyxel.COLOR_NAVY)
     self.star_manager.draw()
 
-    pyxel.text(40, 50, "Mini Shooter", 7)
-    pyxel.text(40, 70, "Press SPACE to Start", 7)
+    pyxel.text(40, 50, "Pyxel Shumup", 7)
+    pyxel.text(25, 70, "Press SPACE to Start", 7)
     pyxel.text(40, 110, "Game Ver:" + str(Common.VERSION), 7)
     pyxel.text(40, 120, "Pyxel Ver:" + str(pyxel.VERSION), 7)
 
@@ -96,9 +96,6 @@ def update_playing(self):
     Common.check_stage_clear()
 
 def draw_playing(self):
-    #爆発描画ーーーーーーーーーーーーーーーーーーーー
-    #Common.explode_manager.draw()
-    #ばくはつだーーーーーーーーーーーーーーーーーーーー
 
     if Common.ShakeTimer == 10:
         pyxel.cls(pyxel.COLOR_WHITE)
@@ -132,7 +129,7 @@ def draw_playing(self):
     # ステージクリア表示
     if Common.GameStateSub == Common.STATE_PLAYING_STAGE_CLEAR:
         pyxel.text(40, 50, "Stage Clear!", 7)
-        pyxel.text(30, 70, "Press SPACE to continue", 7)
+        pyxel.text(20, 70, "Press SPACE to continue", 7)
 
 class App:
     def __init__(self):
@@ -140,7 +137,6 @@ class App:
         pyxel.load("my_resource.pyxres")
 
         Common.GameState = Common.STATE_TITLE
-        #self.GameState = Common.GameState
 
         #Bg Stars
         self.star_manager = StarManager(count=100)        
@@ -156,15 +152,6 @@ class App:
 
     def update(self):
         Common.GameTimer += 1
-
-        #ばくはつだーーーーーーーーーーーーーーーーーーーー
-        #爆発パーティクルのテストコード
-        # if pyxel.btn(pyxel.KEY_Z):
-        #     Common.explode_manager.spawn_explosion(50, 50, 20, ExpType.CIRCLE)
-            #self.Explode_mgr.spawn_explosion(50, 50)
-            #print("Z Key Pressed")
-        #ばくはつだーーーーーーーーーーーーーーーーーーーー
-
 
         match Common.GameState:
         
@@ -182,16 +169,8 @@ class App:
         if pyxel.btn(pyxel.KEY_ESCAPE):
             pyxel.quit()
 
-        #ばくはつだーーーーーーーーーーーーーーーーーーーー
-        #Common.explode_manager.update()
-        #ばくはつだーーーーーーーーーーーーーーーーーーーー
-
-
-        #self.player.update()
-     
    
     def draw(self):
-
 
         match Common.GameState:
             case Common.STATE_TITLE:
@@ -205,15 +184,5 @@ class App:
             case Common.STATE_PAUSE:
                 pass
 
-        #self.Explode_mgr.draw()
-        #ばくはつだーーーーーーーーーーーーーーーーーーーー
-        #Common.explode_manager.draw()
-        #ばくはつだーーーーーーーーーーーーーーーーーーーー
-
-        # カスタムカーソルを描画
-        # cursor_x = pyxel.mouse_x
-        # cursor_y = pyxel.mouse_y
-        # cursor_color = pyxel.frame_count % 16  # カーソルの色を時間とともに変化させる
-        #pyxel.rect(cursor_x, cursor_y, 4, 4, cursor_color)  # 4x4のカラフルな四角形のカーソル
 
 App()
