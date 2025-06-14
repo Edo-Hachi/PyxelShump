@@ -2,7 +2,7 @@ import pyxel
 import random
 
 import Common
-from Enemy import Enemy
+from Enemy import Enemy, ENEMY_MOVE_SPEED, MOVE_THRESHOLD
 from ExplodeManager import ExpType
 
 from StarManager import StarManager
@@ -70,6 +70,31 @@ def update_playing(self):
         return
 
     # --- 敵の移動処理だけを行う（衝突判定は外す） ---
+    # グループ移動の更新
+    Common.enemy_group_x += ENEMY_MOVE_SPEED * Common.enemy_move_direction
+    
+    # 移動量が閾値を超えたら整数値で移動
+    if abs(Common.enemy_group_x) >= MOVE_THRESHOLD:
+        move_amount = int(Common.enemy_group_x)
+        Common.enemy_group_x -= move_amount
+        
+        # グループ全体の移動
+        for enemy in Common.enemy_list:
+            if enemy.active:
+                enemy.x += move_amount
+
+        # 画面端での方向転換チェック
+        if Common.enemy_move_direction == Common.ENEMY_MOVE_RIGHT:
+            # 右端のエネミーを探す
+            rightmost_x = max(enemy.x for enemy in Common.enemy_list if enemy.active)
+            if rightmost_x + 8 >= Common.WIN_WIDTH:  # 8はエネミーの幅
+                Common.enemy_move_direction = Common.ENEMY_MOVE_LEFT
+        else:
+            # 左端のエネミーを探す
+            leftmost_x = min(enemy.x for enemy in Common.enemy_list if enemy.active)
+            if leftmost_x <= 0:
+                Common.enemy_move_direction = Common.ENEMY_MOVE_RIGHT
+
     for _e in Common.enemy_list:
         _e.update()
 

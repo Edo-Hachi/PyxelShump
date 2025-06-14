@@ -91,6 +91,12 @@ enemy_list = []
 enemy_bullet_list = []
 player_bullet_list = []
 
+# エネミーグループの移動方向
+ENEMY_MOVE_RIGHT = 1
+ENEMY_MOVE_LEFT = -1
+enemy_move_direction = ENEMY_MOVE_RIGHT  # 初期方向は右
+enemy_group_x = 0  # グループ全体のX座標オフセット
+
 #パーティクル管理オブジェクト
 explode_manager = ExpMan()
 

@@ -3,9 +3,12 @@ import Common
 from ExplodeManager import ExpType
 
 ANIM_FRAME = 10
+ENEMY_MOVE_SPEED = 0.5  # 移動速度
+MOVE_THRESHOLD = 1  # 移動閾値
 
 class Enemy:
     def __init__(self, x, y, w=8, h=8, life=1, score=10, sprite_num=1):
+        self.base_x = x  # 初期X座標を保存
         self.x = x
         self.y = y
         self.w = w  # Sprite Width
@@ -27,9 +30,8 @@ class Enemy:
         self.active = True
 
     def update(self):
-        
         if Common.StopTimer > 0:
-            return  
+            return
 
     def on_hit(self, bullet):
         # 弾を消す
