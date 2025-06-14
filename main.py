@@ -69,9 +69,19 @@ def update_playing(self):
             Common.GameStateSub = Common.STATE_PLAYING_ENEMY_SPAWN
         return
 
-    # --- 敵の移動処理だけを行う（衝突判定は外す） ---
-    for _e in Common.enemy_list:
-        _e.update()
+    # --- 敵の移動処理（グループで水平移動） ---
+    if Common.enemy_list:
+        left_edge = min(e.x for e in Common.enemy_list)
+        right_edge = max(e.x + e.w for e in Common.enemy_list)
+
+        if Common.ENEMY_MOVE_DIR < 0 and left_edge <= 0:
+            Common.ENEMY_MOVE_DIR = 1
+        elif Common.ENEMY_MOVE_DIR > 0 and right_edge >= Common.WIN_WIDTH:
+            Common.ENEMY_MOVE_DIR = -1
+
+        for _e in Common.enemy_list:
+            _e.x += Common.ENEMY_MOVE_SPEED * Common.ENEMY_MOVE_DIR
+            _e.update()
 
     # --- 衝突判定：プレイヤー弾 vs 敵 ---
     for bullet in Common.player_bullet_list:
