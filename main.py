@@ -64,7 +64,7 @@ def update_playing(self):
 
     # ステージクリア時の処理
     if Common.GameStateSub == Common.STATE_PLAYING_STAGE_CLEAR:
-        if pyxel.btn(pyxel.KEY_SPACE):
+        if pyxel.btn(pyxel.KEY_Z):
             Common.CURRENT_STAGE += 1
             Common.GameStateSub = Common.STATE_PLAYING_ENEMY_SPAWN
         return
@@ -154,11 +154,11 @@ def draw_playing(self):
     # ステージクリア表示
     if Common.GameStateSub == Common.STATE_PLAYING_STAGE_CLEAR:
         pyxel.text(40, 50, "Stage Clear!", 7)
-        pyxel.text(20, 70, "Press SPACE to continue", 7)
+        pyxel.text(20, 70, "Press Z to continue", 7)
 
 class App:
     def __init__(self):
-        pyxel.init(Common.WIN_WIDTH, Common.WIN_HEIGHT, title="Mini Shooter", fps=60)
+        pyxel.init(Common.WIN_WIDTH, Common.WIN_HEIGHT, title="Mini Shooter", display_scale=5, fps=60)
         pyxel.load("my_resource.pyxres")
 
         Common.GameState = Common.STATE_TITLE
