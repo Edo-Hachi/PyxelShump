@@ -1,10 +1,15 @@
 import pyxel
 import Common
+import random
 from ExplodeManager import ExpType
+from EnemyBullet import EnemyBullet
 
 ANIM_FRAME = 10
 ENEMY_MOVE_SPEED = 0.5  # 移動速度
 MOVE_THRESHOLD = 1  # 移動閾値
+SHOOT_INTERVAL = 60  # 発射間隔（フレーム）
+BASE_SHOOT_CHANCE = 0.10  # 基本発射確率
+MAX_SHOOT_CHANCE = 0.30  # 最大発射確率
 
 class Enemy:
     def __init__(self, x, y, w=8, h=8, life=1, score=10, sprite_num=1):
@@ -28,10 +33,28 @@ class Enemy:
         self.sprite_num = sprite_num
 
         self.active = True
+        self.shoot_timer = random.randint(0, SHOOT_INTERVAL)  # 発射タイマー
 
     def update(self):
         if Common.StopTimer > 0:
             return
+
+        # 発射処理
+        self.shoot_timer -= 1
+        if self.shoot_timer <= 0:
+            # 残りの敵の数に応じて発射確率を調整
+            remaining_enemies = len([e for e in Common.enemy_list if e.active])
+            if remaining_enemies > 0:
+                # 敵の数が減るほど発射確率が上がる
+                shoot_chance = min(
+                    BASE_SHOOT_CHANCE + (BASE_SHOOT_CHANCE * (40 - remaining_enemies) / 40),
+                    MAX_SHOOT_CHANCE
+                )
+                if random.random() < shoot_chance:  # 確率で発射
+                    Common.enemy_bullet_list.append(
+                        EnemyBullet(self.x + 4, self.y + 8)  # エネミーの中心から発射
+                    )
+            self.shoot_timer = SHOOT_INTERVAL
 
     def on_hit(self, bullet):
         # 弾を消す

@@ -62,6 +62,10 @@ def update_playing(self):
     for _b in Common.player_bullet_list:
         _b.update()
 
+    # --- 敵の弾の移動処理 ---
+    for _b in Common.enemy_bullet_list:
+        _b.update()
+
     # ステージクリア時の処理
     if Common.GameStateSub == Common.STATE_PLAYING_STAGE_CLEAR:
         if pyxel.btn(pyxel.KEY_Z):
@@ -114,9 +118,38 @@ def update_playing(self):
             ):
                 enemy.on_hit(bullet)  # ヒット処理（敵のライフ減少、爆発など）
 
+    # --- 衝突判定：敵弾 vs プレイヤー ---
+    for bullet in Common.enemy_bullet_list:
+        if not bullet.active:
+            continue  # 非アクティブな弾はスキップ
+
+        # プレイヤーとの衝突チェック
+        if Common.check_collision(
+            bullet.x + bullet.col_x, bullet.y + bullet.col_y, bullet.col_w, bullet.col_h,
+            self.player.x + self.player.col_x, self.player.y + self.player.col_y, 
+            self.player.col_w, self.player.col_h
+        ):
+            bullet.active = False  # 弾を消す
+            self.player.on_hit()  # プレイヤーのヒット処理
+
+    # --- 衝突判定：プレイヤー vs 敵 ---
+    for enemy in Common.enemy_list:
+        if not enemy.active:
+            continue  # 非アクティブな敵はスキップ
+
+        # プレイヤーとの衝突チェック
+        if Common.check_collision(
+            self.player.x + self.player.col_x, self.player.y + self.player.col_y,
+            self.player.col_w, self.player.col_h,
+            enemy.x + enemy.col_x, enemy.y + enemy.col_y,
+            enemy.col_w, enemy.col_h
+        ):
+            self.player.on_hit()  # プレイヤーのヒット処理
+
     # --- ガベージコレクション（死んだ敵、自弾も除去） ---
     Common.enemy_list = [e for e in Common.enemy_list if e.active]
     Common.player_bullet_list = [b for b in Common.player_bullet_list if b.active]
+    Common.enemy_bullet_list = [b for b in Common.enemy_bullet_list if b.active]
 
     Common.check_stage_clear()
 
@@ -142,6 +175,10 @@ def draw_playing(self):
 
     for _e in Common.enemy_list:
         _e.draw()
+    
+    # 敵の弾の描画
+    for _b in Common.enemy_bullet_list:
+        _b.draw()
     
     #爆発描画ーーーーーーーーーーーーーーーーーーーー
     Common.explode_manager.draw()

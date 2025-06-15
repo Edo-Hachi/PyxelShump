@@ -73,19 +73,11 @@ class Player:
         if pyxel.btn(pyxel.KEY_DOWN):
             dy += 1 
 
-        # Normalize(斜め移動ならスピード調整（0.6倍）)
-        # if dx != 0 and dy != 0:
-        #     dx *= 0.6
-        #     dy *= 0.6
-
-
         # 斜め移動時の速度を正規化（1/√2 ≈ 0.707を掛けて対角線上の速度を調整）
         if dx != 0 and dy != 0:
             DIAGONAL_NORMALIZE = 0.707  # 1/√2 の近似値
-            #DIAGONAL_NORMALIZE = 0.6  # 1/√2 の近似値
             dx *= DIAGONAL_NORMALIZE
             dy *= DIAGONAL_NORMALIZE
-
 
         self.x += dx * self.speed
         self.y += dy * self.speed
@@ -107,41 +99,20 @@ class Player:
         
         self.ShotTimer -= 1  # 発射間隔のカウントダウン
 
-        #プレイヤーと敵との当たり判定(ExplodeCoolTimerがプラス値ならクールタイム中)
-        if self.ExplodeCoolTimer < 0:
-            for _enemy in Common.enemy_list:
-                if self.col_active and _enemy.active:
-
-                    if Common.check_collision(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h,
-                                        _enemy.x + _enemy.col_x, _enemy.y + _enemy.col_y, _enemy.col_w, _enemy.col_h):
-
-                        #爆発エフェクト   
-                        Common.explode_manager.spawn_explosion(self.x + 4, self.y + 4, 20, ExpType.CIRCLE)
-
-                        #一度接触すると3秒クールタイム
-                        self.ExplodeCoolTimer = EXPLODE_TIMER
-                        self.NowExploding = True
-
-                        Common.ShakeTimer = Common.SHAKE_TIME
-                        Common.StopTimer = Common.STOP_TIME
-                        
-
-                    #Common.GameState = Common.STATE_GAMEOVER
-        else:
+        # クールタイムの更新
+        if self.ExplodeCoolTimer > 0:
+            self.ExplodeCoolTimer -= 1
             self.NowExploding = False
-            #点滅処理とか
-            pass
-            self.ExplodeCoolTimer-=1
 
     
     def draw(self):
-
-        if self.ExplodeCoolTimer < 0:
-            pyxel.pal()
-        else:
+        # クールタイム中のみ点滅処理
+        if self.ExplodeCoolTimer > 0:
             if math.sin(Common.GameTimer/3) < 0:
                 for n in range(1, 15):
                     pyxel.pal(n,pyxel.COLOR_YELLOW)
+        else:
+            pyxel.pal()  # クールタイム終了時はパレットをリセット
 
         #Player Ship
         pyxel.blt(self.x, self.y, Common.TILE_BANK0,
@@ -167,7 +138,20 @@ class Player:
         for _bullet in Common.player_bullet_list:
             _bullet.draw()
        
-
         # Collision Box 
         if Common.DEBUG:
             pyxel.rectb(self.x + self.col_x, self.y + self.col_y, self.col_w, self.col_h, pyxel.COLOR_GREEN)
+
+    def on_hit(self):
+        """プレイヤーが敵または敵弾に当たった時の処理"""
+        if self.ExplodeCoolTimer <= 0:  # クールタイム中でない場合のみ
+            # 爆発エフェクト
+            Common.explode_manager.spawn_explosion(
+                self.x + 4, self.y + 4, 20, ExpType.CIRCLE
+            )
+            # クールタイム設定
+            self.ExplodeCoolTimer = EXPLODE_TIMER
+            self.NowExploding = True
+            # 画面効果
+            Common.ShakeTimer = Common.SHAKE_TIME
+            Common.StopTimer = Common.STOP_TIME

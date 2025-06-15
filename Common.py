@@ -147,7 +147,7 @@ SprList = {
     "MUZL02" : SpIdx(96, 0),  #MuzzleFlash02
     "MUZL03" : SpIdx(104, 0),  #MuzzleFlash03
     "NULL" : SpIdx(112, 0),
-    "NULL" : SpIdx(120, 0),
+    "ENEMY_BULLET" : SpIdx(120, 0),
 
     "NULL" : SpIdx(0, 8),    #NULL
     
