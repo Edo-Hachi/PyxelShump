@@ -1,3 +1,5 @@
+#型のチェックは適度にお願いします
+
 import pyxel
 import Common
 import math
