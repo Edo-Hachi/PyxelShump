@@ -210,7 +210,10 @@ def check_stage_clear():
     """敵が全滅したかチェックし、次のステージに移行する"""
     global CURRENT_STAGE, GameStateSub
     
-    if not enemy_list:  # 敵リストが空の場合
+    # アクティブな敵がいるかチェック
+    active_enemies = [e for e in enemy_list if e.active]
+    
+    if not active_enemies:  # アクティブな敵がいない場合
         if CURRENT_STAGE < MAX_STAGE:
             GameStateSub = STATE_PLAYING_STAGE_CLEAR
             return True

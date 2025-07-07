@@ -18,6 +18,7 @@ ENEMY_STATE_PREPARE_ATTACK = 1  # 攻撃準備中（身震い）
 ENEMY_STATE_ATTACK = 2          # 攻撃状態（下降中）
 ENEMY_STATE_RETURNING = 3       # 復帰待機中（画面下）
 ENEMY_STATE_DESCENDING = 4      # 復帰降下中（隊列位置に向かって）
+ENEMY_STATE_CONTINUOUS_ATTACK = 5  # 連続攻撃モード（隊列復帰なし）
 
 # 攻撃モード関連の定数
 PREPARE_ATTACK_DURATION = 180  # 攻撃準備時間（フレーム：3秒）
@@ -30,6 +31,7 @@ ATTACK_MOVE_SPEED = 0.8    # 攻撃時の移動速度（速すぎると避けに
 ATTACK_SWAY_AMPLITUDE = 1.5  # 左右の揺れ幅（程よい揺れ）
 ATTACK_SWAY_FREQUENCY = 0.08  # 揺れ頻度（少し遅めでより自然）
 RETURN_DELAY = 120         # 画面下に消えてから復帰するまでの時間（フレーム：2秒）
+RETURN_DELAY_CONTINUOUS = 60  # 連続攻撃モード時の復帰時間（フレーム：1秒）
 DESCEND_SPEED = 1.5        # 復帰時の降下速度
 FORMATION_PROXIMITY = 8    # 隊列位置への近似判定距離（後で微調整可能）
 ATTACK_COOLDOWN = 300      # 隊列復帰後の攻撃クールダウン時間（5秒）
@@ -115,7 +117,16 @@ class Enemy:
             
             # 画面下に出た場合
             if self.y > Common.WIN_HEIGHT:
-                self.state = ENEMY_STATE_RETURNING
+                # 他のアクティブな敵がいるかチェック
+                other_active_enemies = [e for e in Common.enemy_list if e.active and e != self]
+                
+                if not other_active_enemies:
+                    # 他に敵がいない場合は連続攻撃モードに移行
+                    self.state = ENEMY_STATE_CONTINUOUS_ATTACK
+                else:
+                    # 他に敵がいる場合は通常の復帰処理
+                    self.state = ENEMY_STATE_RETURNING
+                
                 self.attack_timer = 0  # タイマーリセット
                 # 画面外に出た時のX座標を記録
                 self.exit_x = self.x
@@ -125,6 +136,15 @@ class Enemy:
         elif self.state == ENEMY_STATE_RETURNING:
             # 復帰待機状態（画面下で待機）
             self.attack_timer += 1
+            
+            # 他のアクティブな敵がいるかチェック
+            other_active_enemies = [e for e in Common.enemy_list if e.active and e != self]
+            
+            if not other_active_enemies:
+                # 他に敵がいない場合は連続攻撃モードに移行
+                self.state = ENEMY_STATE_CONTINUOUS_ATTACK
+                self.attack_timer = 0  # タイマーリセット
+                return
             
             # 画面下の待機位置をキープ（プレイヤーの弾が当たらない）
             self.y = Common.WIN_HEIGHT + 16
@@ -139,6 +159,15 @@ class Enemy:
                 
         elif self.state == ENEMY_STATE_DESCENDING:
             # 復帰降下状態：元の隊列位置に向かって移動
+            
+            # 他のアクティブな敵がいるかチェック
+            other_active_enemies = [e for e in Common.enemy_list if e.active and e != self]
+            
+            if not other_active_enemies:
+                # 他に敵がいない場合は連続攻撃モードに移行
+                self.state = ENEMY_STATE_CONTINUOUS_ATTACK
+                self.attack_timer = 0  # タイマーリセット
+                return
             
             # 下方向に降下
             self.y += DESCEND_SPEED
@@ -164,19 +193,41 @@ class Enemy:
                 self.base_y = target_y  # base_yも更新
                 self.state = ENEMY_STATE_NORMAL  # 通常状態に戻る
                 self.attack_cooldown_timer = ATTACK_COOLDOWN  # 攻撃クールダウン開始
+                
+        elif self.state == ENEMY_STATE_CONTINUOUS_ATTACK:
+            # 連続攻撃モード：最後の敵が永続的に攻撃を続ける
+            self.attack_timer += 1
+            
+            # 画面下の待機位置をキープ（短い時間）
+            self.y = Common.WIN_HEIGHT + 16
+            self.x = self.exit_x  # 画面外に出た時のX座標で待機
+            
+            # 短い復帰時間が経過したら再び攻撃開始
+            if self.attack_timer >= RETURN_DELAY_CONTINUOUS:
+                # ランダムなX座標で上から再出現
+                self.x = random.randint(8, Common.WIN_WIDTH - 16)
+                self.y = -16  # 画面上部から開始
+                self.state = ENEMY_STATE_ATTACK  # 攻撃状態に移行
+                self.attack_timer = 0  # タイマーリセット
+                self.base_x = self.x  # 新しい基準位置を設定
+                self.sway_phase = random.uniform(0, 6.28)  # 揺れ位相をランダム化
 
-        # 発射処理（通常状態の敵のみ）
-        if self.state == ENEMY_STATE_NORMAL:
+        # 発射処理（通常状態と連続攻撃モードの敵）
+        if self.state == ENEMY_STATE_NORMAL or self.state == ENEMY_STATE_CONTINUOUS_ATTACK:
             self.shoot_timer -= 1
             if self.shoot_timer <= 0:
                 # 残りの敵の数に応じて発射確率を調整
                 remaining_enemies = len([e for e in Common.enemy_list if e.active])
                 if remaining_enemies > 0:
-                    # 敵の数が減るほど発射確率が上がる
-                    shoot_chance = min(
-                        BASE_SHOOT_CHANCE + (BASE_SHOOT_CHANCE * (40 - remaining_enemies) / 40),
-                        MAX_SHOOT_CHANCE
-                    )
+                    if self.state == ENEMY_STATE_CONTINUOUS_ATTACK:
+                        # 連続攻撃モードの敵は高い発射確率
+                        shoot_chance = MAX_SHOOT_CHANCE
+                    else:
+                        # 通常状態の敵：敵の数が減るほど発射確率が上がる
+                        shoot_chance = min(
+                            BASE_SHOOT_CHANCE + (BASE_SHOOT_CHANCE * (40 - remaining_enemies) / 40),
+                            MAX_SHOOT_CHANCE
+                        )
                     if random.random() < shoot_chance:  # 確率で発射
                         Common.enemy_bullet_list.append(
                             EnemyBullet(self.x + 4, self.y + 8)  # エネミーの中心から発射
