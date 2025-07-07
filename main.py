@@ -82,22 +82,32 @@ def update_playing(self):
         move_amount = int(Common.enemy_group_x)
         Common.enemy_group_x -= move_amount
         
-        # グループ全体の移動
+        # グループ全体の移動（通常状態と攻撃準備状態の敵）
         for enemy in Common.enemy_list:
-            if enemy.active:
+            if enemy.active and (enemy.state == 0 or enemy.state == 1):  # NORMAL or PREPARE_ATTACK
                 enemy.x += move_amount
+                enemy.base_x += move_amount  # 基準位置も更新
+            
+            # 全ての敵の隊列内位置を更新（攻撃中・復帰中の敵も追跡）
+            if enemy.active:
+                enemy.formation_x += move_amount
 
-        # 画面端での方向転換チェック
-        if Common.enemy_move_direction == Common.ENEMY_MOVE_RIGHT:
-            # 右端のエネミーを探す
-            rightmost_x = max(enemy.x for enemy in Common.enemy_list if enemy.active)
-            if rightmost_x + 8 >= Common.WIN_WIDTH:  # 8はエネミーの幅
-                Common.enemy_move_direction = Common.ENEMY_MOVE_LEFT
-        else:
-            # 左端のエネミーを探す
-            leftmost_x = min(enemy.x for enemy in Common.enemy_list if enemy.active)
-            if leftmost_x <= 0:
-                Common.enemy_move_direction = Common.ENEMY_MOVE_RIGHT
+        # 画面端での方向転換チェック（通常状態と攻撃準備状態の敵）
+        formation_enemies = [e for e in Common.enemy_list if e.active and (e.state == 0 or e.state == 1)]
+        if formation_enemies:
+            if Common.enemy_move_direction == Common.ENEMY_MOVE_RIGHT:
+                # 右端のエネミーを探す
+                rightmost_x = max(enemy.base_x for enemy in formation_enemies)
+                if rightmost_x + 8 >= Common.WIN_WIDTH:  # 8はエネミーの幅
+                    Common.enemy_move_direction = Common.ENEMY_MOVE_LEFT
+            else:
+                # 左端のエネミーを探す
+                leftmost_x = min(enemy.base_x for enemy in formation_enemies)
+                if leftmost_x <= 0:
+                    Common.enemy_move_direction = Common.ENEMY_MOVE_RIGHT
+
+    # 攻撃ステート選択の更新
+    Common.update_enemy_attack_selection()
 
     for _e in Common.enemy_list:
         _e.update()

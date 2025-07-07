@@ -1,5 +1,6 @@
 from collections import namedtuple
 from ExplodeManager import ExpMan
+import random
 #from enum import Enum
 
 VERSION = "0.1.3"
@@ -214,3 +215,29 @@ def check_stage_clear():
             GameStateSub = STATE_PLAYING_STAGE_CLEAR
             return True
     return False
+
+# 攻撃ステート管理用の変数
+attack_selection_timer = 0
+ATTACK_SELECTION_INTERVAL = 240  # 攻撃選択間隔（フレーム：4秒）
+ATTACK_CHANCE = 0.75  # 攻撃選択確率（75%で非常に頻繁に）
+
+def update_enemy_attack_selection():
+    """敵の攻撃ステート選択を管理する"""
+    global attack_selection_timer
+    
+    # 攻撃選択タイマーの更新
+    attack_selection_timer += 1
+    
+    # 一定間隔で攻撃する敵を選択
+    if attack_selection_timer >= ATTACK_SELECTION_INTERVAL:
+        attack_selection_timer = 0
+        
+        # 通常状態かつクールダウン中でない敵のみを対象に攻撃選択を行う
+        normal_enemies = [e for e in enemy_list if e.active and e.state == 0 and e.attack_cooldown_timer == 0]  # ENEMY_STATE_NORMAL = 0
+        
+        if normal_enemies:
+            # ランダムに敵を選択して攻撃準備状態にする
+            if random.random() < ATTACK_CHANCE:
+                selected_enemy = random.choice(normal_enemies)
+                selected_enemy.state = 1  # ENEMY_STATE_PREPARE_ATTACK = 1
+                selected_enemy.attack_timer = 0  # タイマーリセット
